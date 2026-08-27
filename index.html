@@ -1206,89 +1206,17 @@
     return h + '</div></div>';
   }
 
-  function ptHTML(t){
-    if(t.st !== "live"){
-      return '<div class="pt open"><div class="h"><span class="badge">EMPTY</span>'
-        + '<span class="kind">이 시간대 · 이 동네</span></div>'
-        + '<div class="nm2">제휴 매장 모집 중 — 이 자리에 로컬 가게가 들어갑니다</div></div>';
-    }
-    return '<div class="pt"><div class="h"><span class="badge">제휴</span>'
-      + '<span class="kind">' + esc(t.kind) + '</span></div>'
-      + '<div class="nm2">' + esc(t.n) + '</div>'
-      + '<p class="sig">' + esc(t.one) + (t.sig ? '  ·  <b style="color:var(--txt)">' + esc(t.sig) + '</b>' : '') + '</p>'
-      + (t.ben ? '<p class="ben">' + esc(t.ben) + '</p>' : '')
-      + '<a class="mapl" href="' + mapURL(t.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
-      + '</div>';
-  }
-
-  function s7html(sp, prioSet){
-    var h = '<div class="s7">';
-    CRIT.forEach(function(c, idx){
-      var hi = !!prioSet[c.k], v = sp.s[idx], bars = "";
-      for(var j = 0; j < 5; j++) bars += '<i class="' + (j < v ? "on" : "") + '"></i>';
-      h += '<span class="k' + (hi ? " hi" : "") + '">' + esc(c.ax) + '</span>'
-        + '<span class="st5' + (hi ? " hi" : "") + '">' + bars + '</span>'
-        + '<span class="v' + (hi ? " hi" : "") + '">' + v + '</span>';
-    });
-    var cap = state.prio.map(function(k){
-      return CRIT[CI[k]].ax + " " + sp.s[CI[k]] + "/5";
-    }).join("  ·  ");
-    h += '<span class="s7cap">당신이 고른 기준 — ' + esc(cap) + '</span></div>';
-    return h;
-  }
-
-  function renderResult(){
-    var list = scored();
-    var allR = regionRank(list);
-    var grp = (AREAS.filter(function(a){ return a.v === state.area; })[0] || {}).g;
-    var regions = grp ? allR.filter(function(r){ return grp.indexOf(r.r) >= 0; }) : allR;
-    if(!regions.length) regions = allR;
-
-    var best = regions[0];
-    var others = regions.length > 1
-      ? regions.slice(1, 5)
-      : allR.filter(function(r){ return r.r !== best.r; }).slice(0, 4);
-    var othersLabel = regions.length > 1
-      ? "OTHER REGIONS · 이 기준이면 여기도"
-      : "OTHER REGIONS · 지역을 안 정했다면";
-    var course = buildCourse(list, best.r);
-    var RG = REGION[best.r];
-    var prioSet = {}; state.prio.forEach(function(k){ prioSet[k] = 1; });
-
+  function courseBlockHTML(course, RG, rankLabel, prioSet){
     var ptUsed = {}, liveCount = 0;
     course.forEach(function(lg){
       var t = partnerFor(lg.it.sp, lg.slot.k, ptUsed);
       if(t){ lg.pt = t; if(t.st === "live"){ ptUsed[t.n] = 1; liveCount++; } }
     });
 
-    var theme = state.prio.map(function(k){ return THEME_WORD[k]; }).join(", ") + " 오는 하루";
-    var whoT = (WHOS.filter(function(o){ return o.v === state.who; })[0] || {}).t || "";
-    var walkT = (WALKS.filter(function(o){ return o.v === state.walk; })[0] || {}).t || "";
-    var moveT = (MOVES.filter(function(o){ return o.v === state.move; })[0] || {}).t || "";
-
     var h = '<div class="band"><div class="stack">'
-      + '<span class="tag on">TODAY’S THEME</span>'
-      + '<h1 class="themetitle">〈<span class="lit">' + esc(theme) + '</span>〉</h1>'
-      + '<div class="prio">';
-    CRIT.forEach(function(c){
-      var on = prioSet[c.k];
-      h += '<span class="' + (on ? "" : "off") + '">' + c.e + ' ' + esc(c.t) + '</span>';
-    });
-    h += '</div>'
-      + '<p class="regionline"><b style="color:var(--sun);font-weight:600;font-size:17px">' + esc(RG.n) + '</b>'
-      + '<br><span style="color:var(--txt-3)">' + esc(RG.s) + '</span>'
+      + '<span class="tag on">' + esc(rankLabel) + ' · ' + esc(RG.n) + '</span>'
+      + '<p class="regionline"><span style="color:var(--txt-3)">' + esc(RG.s) + '</span>'
       + '<br>' + esc(RG.mv) + '</p>'
-      + '<p class="hint">' + (state.fromSelfMap
-            ? '🧭 자아찾기 결과(' + esc(state.selfType || "") + ')로 우선순위를 자동으로 채워 만든 코스입니다.'
-            : [whoT, walkT, moveT].filter(Boolean).map(esc).join(' · ')
-              + ' 기준으로 전국 ' + SPOT.length + '개 스팟을 7기준 점수로 매칭했습니다.')
-      + '</p>'
-      + '</div></div>'
-
-      + campaignBlock(best.r)
-
-      + '<div class="band"><div class="stack">'
-      + '<span class="tag on">YOUR DAY · ' + esc(RG.n) + '</span>'
       + '<div class="course">';
 
     course.forEach(function(lg, idx){
@@ -1335,7 +1263,93 @@
         + '</div>';
     }
 
-    h += '</div></div></div>';
+    return h + '</div></div></div>';
+  }
+
+  function ptHTML(t){
+    if(t.st !== "live"){
+      return '<div class="pt open"><div class="h"><span class="badge">EMPTY</span>'
+        + '<span class="kind">이 시간대 · 이 동네</span></div>'
+        + '<div class="nm2">제휴 매장 모집 중 — 이 자리에 로컬 가게가 들어갑니다</div></div>';
+    }
+    return '<div class="pt"><div class="h"><span class="badge">제휴</span>'
+      + '<span class="kind">' + esc(t.kind) + '</span></div>'
+      + '<div class="nm2">' + esc(t.n) + '</div>'
+      + '<p class="sig">' + esc(t.one) + (t.sig ? '  ·  <b style="color:var(--txt)">' + esc(t.sig) + '</b>' : '') + '</p>'
+      + (t.ben ? '<p class="ben">' + esc(t.ben) + '</p>' : '')
+      + '<a class="mapl" href="' + mapURL(t.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
+      + '</div>';
+  }
+
+  function s7html(sp, prioSet){
+    var h = '<div class="s7">';
+    CRIT.forEach(function(c, idx){
+      var hi = !!prioSet[c.k], v = sp.s[idx], bars = "";
+      for(var j = 0; j < 5; j++) bars += '<i class="' + (j < v ? "on" : "") + '"></i>';
+      h += '<span class="k' + (hi ? " hi" : "") + '">' + esc(c.ax) + '</span>'
+        + '<span class="st5' + (hi ? " hi" : "") + '">' + bars + '</span>'
+        + '<span class="v' + (hi ? " hi" : "") + '">' + v + '</span>';
+    });
+    var cap = state.prio.map(function(k){
+      return CRIT[CI[k]].ax + " " + sp.s[CI[k]] + "/5";
+    }).join("  ·  ");
+    h += '<span class="s7cap">당신이 고른 기준 — ' + esc(cap) + '</span></div>';
+    return h;
+  }
+
+  function renderResult(){
+    var list = scored();
+    var allR = regionRank(list);
+    var grp = (AREAS.filter(function(a){ return a.v === state.area; })[0] || {}).g;
+    var regions = grp ? allR.filter(function(r){ return grp.indexOf(r.r) >= 0; }) : allR;
+    if(!regions.length) regions = allR;
+
+    var top3 = regions.slice(0, 3);
+    var used = {}; top3.forEach(function(r){ used[r.r] = 1; });
+    var restOfGroup = regions.slice(3).filter(function(r){ return !used[r.r]; });
+    var restOfAll = allR.filter(function(r){ return !used[r.r] && restOfGroup.indexOf(r) < 0; });
+    while(top3.length < 3 && restOfAll.length){
+      var filled = restOfAll.shift();
+      top3.push(filled); used[filled.r] = 1;
+    }
+    var others = restOfGroup.length ? restOfGroup.slice(0, 4) : restOfAll.slice(0, 4);
+    var othersLabel = restOfGroup.length
+      ? "OTHER REGIONS · 이 기준이면 여기도"
+      : "OTHER REGIONS · 범위를 넓히면";
+
+    var best = top3[0];
+    var course = buildCourse(list, best.r);
+    var RG = REGION[best.r];
+    var prioSet = {}; state.prio.forEach(function(k){ prioSet[k] = 1; });
+
+    var theme = state.prio.map(function(k){ return THEME_WORD[k]; }).join(", ") + " 오는 하루";
+    var whoT = (WHOS.filter(function(o){ return o.v === state.who; })[0] || {}).t || "";
+    var walkT = (WALKS.filter(function(o){ return o.v === state.walk; })[0] || {}).t || "";
+    var moveT = (MOVES.filter(function(o){ return o.v === state.move; })[0] || {}).t || "";
+
+    var h = '<div class="band"><div class="stack">'
+      + '<span class="tag on">TODAY’S THEME</span>'
+      + '<h1 class="themetitle">〈<span class="lit">' + esc(theme) + '</span>〉</h1>'
+      + '<div class="prio">';
+    CRIT.forEach(function(c){
+      var on = prioSet[c.k];
+      h += '<span class="' + (on ? "" : "off") + '">' + c.e + ' ' + esc(c.t) + '</span>';
+    });
+    h += '</div>'
+      + '<p class="hint">' + (state.fromSelfMap
+            ? '🧭 자아찾기 결과(' + esc(state.selfType || "") + ')로 우선순위를 자동으로 채워 만든 코스 3가지입니다.'
+            : [whoT, walkT, moveT].filter(Boolean).map(esc).join(' · ')
+              + ' 기준으로 전국 ' + SPOT.length + '개 스팟을 7기준 점수로 매칭한 코스 3가지입니다.')
+      + '</p>'
+      + '</div></div>'
+
+      + campaignBlock(best.r);
+
+    var RANK_LABEL = ["1순위", "2순위", "3순위"];
+    top3.forEach(function(r, ri){
+      var c = ri === 0 ? course : buildCourse(list, r.r);
+      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet);
+    });
 
     if(others.length){
       h += '<div class="band"><div class="stack">'
