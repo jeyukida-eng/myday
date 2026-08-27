@@ -193,7 +193,9 @@
   .mapl{font-family:var(--f-num);font-size:11px;letter-spacing:.06em;color:var(--sea);border-bottom:1.5px solid var(--sea-deep);padding-bottom:2px;display:inline-block;margin-top:13px}
   .mapl:hover{color:#8FF0E2;border-color:var(--sea)}
 
-  .alt{display:flex;justify-content:space-between;gap:12px;padding:14px 4px;border-top:1px dashed var(--hair);align-items:baseline;font-size:14px;color:var(--txt-2)}
+  .alt{display:flex;width:100%;justify-content:space-between;gap:12px;padding:14px 4px;border:0;border-top:1px dashed var(--hair);background:none;align-items:baseline;font-size:14px;color:var(--txt-2);text-align:left;cursor:pointer;transition:color .15s ease}
+  .alt:hover{color:var(--txt)}
+  .alt:hover .p{color:var(--sun)}
   .alt b{color:var(--txt);font-weight:700}
   .alt .p{font-family:var(--f-num);font-size:12px;color:var(--sun);flex:none}
   .alt small{color:var(--txt-3);font-size:12px}
@@ -1340,10 +1342,10 @@
         + '<span class="tag">' + othersLabel + '</span><div>';
       others.forEach(function(r){
         var g = REGION[r.r];
-        h += '<div class="alt"><span><b>' + esc(g.n) + '</b> <small>' + esc(g.s) + '</small></span>'
-          + '<span class="p">' + pct(r.v) + '</span></div>';
+        h += '<button class="alt" data-r="' + r.r + '"><span><b>' + esc(g.n) + '</b> <small>' + esc(g.s) + '</small></span>'
+          + '<span class="p">' + pct(r.v) + '</span></button>';
       });
-      h += '</div><p class="hint">지역을 직접 고르면 그 안에서 다시 짜 드립니다.</p></div></div>';
+      h += '</div><p class="hint">지역을 누르면 그 지역으로 코스를 다시 짜 드립니다.</p></div></div>';
     }
 
     var lowest = CK.filter(function(k){ return !prioSet[k]; });
@@ -1370,6 +1372,12 @@
     app.innerHTML = h;
     drawCard(theme, RG, course, prioSet);
 
+    Array.prototype.forEach.call(app.querySelectorAll(".alt[data-r]"), function(b){
+      b.onclick = function(){
+        state.area = b.getAttribute("data-r");
+        save(); render();
+      };
+    });
     document.getElementById("dl").onclick = saveCard;
     document.getElementById("back").onclick = function(){ state.step = STEPS.indexOf("prio"); save(); render(); };
     var m2 = document.getElementById("manual2");
