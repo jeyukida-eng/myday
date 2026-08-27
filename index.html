@@ -833,7 +833,7 @@
     var valid = raw.split(",").map(function(x){ return x.trim(); })
       .filter(function(k){ return CI[k] !== undefined; }).slice(0, 3);
     if(!valid.length) return;
-    state = { step:-1, area:"JJ", prio:valid, who:null, walk:null, move:null,
+    state = { step:STEPS.length, area:"JJ", prio:valid, who:null, walk:null, move:null,
       fromSelfMap:true, selfType:qp.get("type") || "" };
     resumable = false;
     save();
@@ -1276,8 +1276,11 @@
       + '<p class="regionline"><b style="color:var(--sun);font-weight:600;font-size:17px">' + esc(RG.n) + '</b>'
       + '<br><span style="color:var(--txt-3)">' + esc(RG.s) + '</span>'
       + '<br>' + esc(RG.mv) + '</p>'
-      + '<p class="hint">' + [whoT, walkT, moveT].filter(Boolean).map(esc).join(' · ')
-      + ' 기준으로 전국 ' + SPOT.length + '개 스팟을 7기준 점수로 매칭했습니다.</p>'
+      + '<p class="hint">' + (state.fromSelfMap
+            ? '🧭 자아찾기 결과(' + esc(state.selfType || "") + ')로 우선순위를 자동으로 채워 만든 코스입니다.'
+            : [whoT, walkT, moveT].filter(Boolean).map(esc).join(' · ')
+              + ' 기준으로 전국 ' + SPOT.length + '개 스팟을 7기준 점수로 매칭했습니다.')
+      + '</p>'
       + '</div></div>'
 
       + campaignBlock(best.r)
@@ -1358,6 +1361,7 @@
       + '<div class="btnrow">'
       + '<button class="btn solid" id="dl">코스 카드 저장</button>'
       + '<button class="btn quiet" id="back">기준 바꾸기</button>'
+      + (state.fromSelfMap ? '<button class="btn quiet" id="manual2">지역·동행 직접 정하기</button>' : '')
       + '<button class="btn quiet" id="again">처음부터</button>'
       + '</div>'
       + '<p class="foot-note">추천은 7기준 점수 매칭 결과입니다. 영업시간·휴무일·예약·요금은 반드시 직접 확인하세요. 지도 링크는 네이버 지도로 연결됩니다.</p>'
@@ -1368,6 +1372,8 @@
 
     document.getElementById("dl").onclick = saveCard;
     document.getElementById("back").onclick = function(){ state.step = STEPS.indexOf("prio"); save(); render(); };
+    var m2 = document.getElementById("manual2");
+    if(m2) m2.onclick = function(){ state.step = 0; save(); render(); };
     document.getElementById("again").onclick = function(){
       state = { step:-1, area:null, prio:[], who:null, walk:null, move:null };
       save(); resumable = false; render();
