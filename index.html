@@ -800,6 +800,17 @@
 
   var STEPS = ["area", "prio", "who", "walk", "move"];
 
+  function skipTargetForward(i){
+    var n = i + 1;
+    if(n === STEPS.indexOf("prio") && state.fromSelfMap && state.prio.length) n++;
+    return n;
+  }
+  function skipTargetBackward(i){
+    var n = i - 1;
+    if(n === STEPS.indexOf("prio") && state.fromSelfMap && state.prio.length) n--;
+    return n;
+  }
+
   /* ============ 상태 ============ */
 
   var KEY = "myday-v2";
@@ -813,6 +824,20 @@
     }catch(e){}
   })();
   var resumable = state.prio && state.prio.length > 0;
+
+  /* 자아찾기 앱에서 ?prio=see,story,shot&type=IF 형태로 넘어온 경우 그 값을 받는다 */
+  (function importFromSelfMap(){
+    var qp = new URLSearchParams(location.search);
+    var raw = qp.get("prio");
+    if(!raw) return;
+    var valid = raw.split(",").map(function(x){ return x.trim(); })
+      .filter(function(k){ return CI[k] !== undefined; }).slice(0, 3);
+    if(!valid.length) return;
+    state = { step:-1, area:null, prio:valid, who:null, walk:null, move:null,
+      fromSelfMap:true, selfType:qp.get("type") || "" };
+    resumable = false;
+    save();
+  })();
 
   /* ============ 채점 ============ */
 
@@ -1043,6 +1068,11 @@
       + '이건 반대입니다. <b>사람을 먼저 이해하고</b> 그 사람에게 맞는 장소를 찾습니다.</p>'
       + '<p class="kicker">전국 스팟을 <em>7가지 기준</em>으로 점수화했습니다.<br>'
       + '당신이 중요하게 보는 것 <em>1~3개</em>만 고르면,<br>오전부터 저녁까지 하루가 나옵니다.</p>'
+      + (state.fromSelfMap
+          ? '<p class="hint">🧭 자아찾기 결과로 우선순위가 자동 채워졌습니다 — <b>'
+            + state.prio.map(function(k){ return CRIT[CI[k]].e + " " + CRIT[CI[k]].t; }).join(", ")
+            + '</b>. 다음 화면에서 언제든 바꿀 수 있어요.</p>'
+          : '')
       + '</div></div>'
 
       + '<div class="band"><div class="stack">'
@@ -1060,7 +1090,9 @@
 
     app.innerHTML = h;
     document.getElementById("go").onclick = function(){
-      state = { step:0, area:null, prio:[], who:null, walk:null, move:null };
+      state = state.fromSelfMap
+        ? { step:0, area:null, prio:state.prio, who:null, walk:null, move:null, fromSelfMap:true, selfType:state.selfType }
+        : { step:0, area:null, prio:[], who:null, walk:null, move:null };
       save(); render();
     };
     var r = document.getElementById("resume");
@@ -1098,11 +1130,11 @@
         });
         document.getElementById("next").disabled = false;
         save();
-        setTimeout(function(){ state.step = i + 1; save(); render(); }, 230);
+        setTimeout(function(){ state.step = skipTargetForward(i); save(); render(); }, 230);
       };
     });
-    document.getElementById("prev").onclick = function(){ state.step = i - 1; save(); render(); };
-    document.getElementById("next").onclick = function(){ state.step = i + 1; save(); render(); };
+    document.getElementById("prev").onclick = function(){ state.step = skipTargetBackward(i); save(); render(); };
+    document.getElementById("next").onclick = function(){ state.step = skipTargetForward(i); save(); render(); };
   }
 
   function renderPrio(){
@@ -1141,8 +1173,8 @@
         save(); renderPrio();
       };
     });
-    document.getElementById("prev").onclick = function(){ state.step = i - 1; save(); render(); };
-    document.getElementById("next").onclick = function(){ state.step = i + 1; save(); render(); };
+    document.getElementById("prev").onclick = function(){ state.step = skipTargetBackward(i); save(); render(); };
+    document.getElementById("next").onclick = function(){ state.step = skipTargetForward(i); save(); render(); };
   }
 
   function campaignBlock(regionKey){
