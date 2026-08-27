@@ -833,7 +833,7 @@
     var valid = raw.split(",").map(function(x){ return x.trim(); })
       .filter(function(k){ return CI[k] !== undefined; }).slice(0, 3);
     if(!valid.length) return;
-    state = { step:-1, area:null, prio:valid, who:null, walk:null, move:null,
+    state = { step:-1, area:"JJ", prio:valid, who:null, walk:null, move:null,
       fromSelfMap:true, selfType:qp.get("type") || "" };
     resumable = false;
     save();
@@ -1069,9 +1069,9 @@
       + '<p class="kicker">전국 스팟을 <em>7가지 기준</em>으로 점수화했습니다.<br>'
       + '당신이 중요하게 보는 것 <em>1~3개</em>만 고르면,<br>오전부터 저녁까지 하루가 나옵니다.</p>'
       + (state.fromSelfMap
-          ? '<p class="hint">🧭 자아찾기 결과로 우선순위가 자동 채워졌습니다 — <b>'
+          ? '<p class="hint">🧭 자아찾기 결과 <b>' + esc(state.selfType || "") + '</b> 기준으로 우선순위를 채웠습니다 — <b>'
             + state.prio.map(function(k){ return CRIT[CI[k]].e + " " + CRIT[CI[k]].t; }).join(", ")
-            + '</b>. 다음 화면에서 언제든 바꿀 수 있어요.</p>'
+            + '</b>. <b>제주</b> 안에서 지역까지 자동으로 골라서 바로 코스를 보여드릴게요.</p>'
           : '')
       + '</div></div>'
 
@@ -1084,17 +1084,24 @@
     h += '</div></div></div>'
 
       + '<div class="band"><div class="btnrow">'
-      + '<button class="btn solid" id="go">시작하기</button>'
+      + '<button class="btn solid" id="go">' + (state.fromSelfMap ? "내 여행 코스 바로 보기" : "시작하기") + '</button>'
       + (resumable ? '<button class="btn quiet" id="resume">이어서 하기</button>' : '')
-      + '</div><p class="foot-note" style="margin-top:18px">답변은 이 브라우저에만 저장됩니다. 서버로 전송되지 않습니다.</p></div>';
+      + '</div>'
+      + (state.fromSelfMap ? '<p class="hint" style="margin-top:10px"><button class="skip" id="manual">아니면 지역·동행 직접 정하기 →</button></p>' : '')
+      + '<p class="foot-note" style="margin-top:18px">답변은 이 브라우저에만 저장됩니다. 서버로 전송되지 않습니다.</p></div>';
 
     app.innerHTML = h;
     document.getElementById("go").onclick = function(){
-      state = state.fromSelfMap
-        ? { step:0, area:null, prio:state.prio, who:null, walk:null, move:null, fromSelfMap:true, selfType:state.selfType }
-        : { step:0, area:null, prio:[], who:null, walk:null, move:null };
+      if(state.fromSelfMap){
+        state.step = STEPS.length;
+        save(); render();
+        return;
+      }
+      state = { step:0, area:null, prio:[], who:null, walk:null, move:null };
       save(); render();
     };
+    var m = document.getElementById("manual");
+    if(m) m.onclick = function(){ state.step = 0; save(); render(); };
     var r = document.getElementById("resume");
     if(r) r.onclick = function(){ state.step = 0; render(); };
   }
