@@ -1513,6 +1513,13 @@
     c.textAlign = "right"; c.fillText(SITE, W - PAD, H - 48); c.textAlign = "left";
   }
 
+  function resetAfterSave(){
+    setTimeout(function(){
+      state = { step:-1, area:null, prio:[], who:null, walk:null, move:null };
+      save(); resumable = false; render();
+    }, 2600);
+  }
+
   function saveCard(){
     var cv = document.getElementById("card");
     if(!cv) return;
@@ -1520,14 +1527,15 @@
       var url = cv.toDataURL("image/png");
       if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
         var w = window.open();
-        if(w){ w.document.write('<img src="' + url + '" style="width:100%">'); toast("이미지를 길게 눌러 저장하세요"); }
+        if(w){ w.document.write('<img src="' + url + '" style="width:100%">'); toast("이미지를 길게 눌러 저장하세요 · 곧 처음 화면으로 돌아갑니다"); resetAfterSave(); }
         else toast("팝업이 차단되었습니다");
         return;
       }
       var a = document.createElement("a");
       a.href = url; a.download = "나의하루_코스.png";
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      toast("저장했습니다");
+      toast("저장했습니다 · 곧 처음 화면으로 돌아갑니다");
+      resetAfterSave();
     }catch(e){ toast("저장에 실패했습니다"); }
   }
 
