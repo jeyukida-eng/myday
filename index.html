@@ -1344,12 +1344,13 @@
   ==================================================== */
   var SLOT_ICON = { m:"☀️", l:"🍚", a:"📍", s:"🌇", e:"🌙" };
 
-  function routeMapSVG(course){
+  function routeMapSVG(course, idx, RG, rankLabel){
     if(!course.length) return "";
-    var W = 340, R = 46, PADX = 74, GAPY = 172, TOP = 80;
-    var H = TOP + (course.length - 1) * GAPY + R + 60;
+    var W = 340, R = 46, PADX = 74, GAPY = 172, HEAD = 58, FOOT = 46;
+    var bodyH = (course.length - 1) * GAPY + R + 60;
+    var H = HEAD + bodyH + FOOT;
     var pts = course.map(function(lg, i){
-      return { x: i % 2 === 0 ? PADX : (W - PADX), y: TOP + i * GAPY, lg: lg };
+      return { x: i % 2 === 0 ? PADX : (W - PADX), y: HEAD + 26 + i * GAPY, lg: lg };
     });
 
     var defs = "", circles = "", labels = "", path = "";
@@ -1362,28 +1363,28 @@
         var midY = (p0.y + p1.y) / 2;
         d += " C" + p0.x + "," + midY + " " + p1.x + "," + midY + " " + p1.x + "," + p1.y;
       }
-      path = '<path d="' + d + '" fill="none" stroke="var(--sun-deep)" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>';
+      path = '<path d="' + d + '" fill="none" stroke="#B0602F" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>';
     }
 
     pts.forEach(function(p, i){
-      var sp = p.lg.it.sp, cid = "clip" + i + "_" + Math.random().toString(36).slice(2, 7);
+      var sp = p.lg.it.sp, cid = "clip" + idx + "_" + i;
       var img = sp.img;
       if(img){
         defs += '<clipPath id="' + cid + '"><circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '"/></clipPath>';
         circles += '<image href="' + esc(img) + '" x="' + (p.x - (R - 4)) + '" y="' + (p.y - (R - 4)) + '" '
           + 'width="' + (R - 4) * 2 + '" height="' + (R - 4) * 2 + '" preserveAspectRatio="xMidYMid slice" clip-path="url(#' + cid + ')"/>';
       } else {
-        circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '" fill="var(--deep)"/>'
+        circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '" fill="#1D1428"/>'
           + '<text x="' + p.x + '" y="' + (p.y + 9) + '" font-size="30" text-anchor="middle">' + (SLOT_ICON[p.lg.slot.k] || "📍") + '</text>';
       }
-      circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + R + '" fill="none" stroke="' + (i === 0 ? "var(--sun)" : "var(--hair-2)") + '" stroke-width="3"/>';
-      circles += '<circle cx="' + p.x + '" cy="' + (p.y - R + 2) + '" r="12" fill="var(--sun)"/>'
+      circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + R + '" fill="none" stroke="' + (i === 0 ? "#FF9F5A" : "#4F3B58") + '" stroke-width="3"/>';
+      circles += '<circle cx="' + p.x + '" cy="' + (p.y - R + 2) + '" r="12" fill="#FF9F5A"/>'
         + '<text x="' + p.x + '" y="' + (p.y - R + 6) + '" font-size="10" font-weight="700" text-anchor="middle" fill="#2A1206">' + (i + 1) + '</text>';
 
       var name = sp.n.length > 13 ? sp.n.slice(0, 12) + "…" : sp.n;
       var lx = p.x, anchor = "middle", ly = p.y + R + 24;
-      labels += '<text x="' + lx + '" y="' + ly + '" font-size="14" font-weight="700" fill="var(--txt)" text-anchor="' + anchor + '">' + esc(name) + '</text>'
-        + '<text x="' + lx + '" y="' + (ly + 17) + '" font-size="10" fill="var(--txt-3)" text-anchor="' + anchor + '">' + esc(p.lg.slot.t) + ' ' + esc(p.lg.slot.h) + '</text>';
+      labels += '<text x="' + lx + '" y="' + ly + '" font-size="14" font-weight="700" fill="#FBF2E6" text-anchor="' + anchor + '">' + esc(name) + '</text>'
+        + '<text x="' + lx + '" y="' + (ly + 17) + '" font-size="10" fill="#8D7C93" text-anchor="' + anchor + '">' + esc(p.lg.slot.t) + ' ' + esc(p.lg.slot.h) + '</text>';
     });
 
     var creditLines = [];
@@ -1393,18 +1394,26 @@
     });
     var hasAnyImg = course.some(function(lg){ return lg.it.sp.img; });
 
-    return '<div class="routemap"><svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="max-width:' + W + 'px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">'
-      + '<defs>' + defs + '</defs>'
-      + path + circles + labels
+    var bg = '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#150E1E"/>';
+    var header = '<text x="' + (W / 2) + '" y="24" font-size="12" font-weight="700" fill="#FF9F5A" text-anchor="middle" letter-spacing="1">' + esc((rankLabel || "").split(" ")[0]) + '</text>'
+      + '<text x="' + (W / 2) + '" y="40" font-size="11" fill="#8D7C93" text-anchor="middle">' + esc(RG ? RG.n : "") + '</text>';
+    var footer = '<text x="' + (W / 2) + '" y="' + (H - 16) + '" font-size="9" fill="#5A4C63" text-anchor="middle" letter-spacing="1">' + esc(SITE || "MY DAY") + '</text>';
+
+    return '<div class="routemap" id="routemap' + idx + '"><svg id="routemapSvg' + idx + '" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" style="width:100%;max-width:' + W + 'px;display:block;margin:0 auto;background:#150E1E;border-radius:var(--r-lg)" xmlns="http://www.w3.org/2000/svg">'
+      + bg + '<defs>' + defs + '</defs>'
+      + header + path + circles + labels + footer
       + '</svg>'
       + (hasAnyImg ? '' : '<p class="hint" style="text-align:center;margin-top:6px">사진은 순차적으로 채워질 예정입니다 — 지금은 시간대 아이콘으로 표시됩니다</p>')
       + (creditLines.length
           ? '<p class="hint" style="margin-top:10px;padding:0 14px;line-height:1.7">사진 출처 — ' + creditLines.join(' · ') + '</p>'
           : '')
+      + '<div class="btnrow" style="justify-content:center;margin-top:10px">'
+      + '<button class="btn quiet saveRouteBtn" data-idx="' + idx + '">이 코스 카드 저장</button>'
+      + '</div>'
       + '</div>';
   }
 
-  function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode, showLocNote){
+  function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode, showLocNote, idx){
     var ptUsed = {}, liveCount = 0;
     course.forEach(function(lg){
       var t = partnerFor(lg.it.sp, lg.slot.k, ptUsed);
@@ -1417,7 +1426,7 @@
       + '<br>' + esc(RG.mv) + '</p>'
       + '<p class="hint">🕒 ' + durationLabel(course) + '</p>'
       + (showLocNote ? '<p class="hint" id="locNote">📍 위치 확인 중 — 브라우저에 위치 권한을 허용하면 현재 위치에서 첫 장소까지 대략 거리를 보여드립니다.</p>' : '')
-      + routeMapSVG(course)
+      + routeMapSVG(course, idx, RG, rankLabel)
       + '<div class="course">';
 
     course.forEach(function(lg, idx){
@@ -1536,7 +1545,7 @@
     var RANK_LABEL = ["1순위", "2순위", "3순위"];
     top3.forEach(function(r, ri){
       var c = ri === 0 ? course : buildCourse(list, r.r);
-      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r, ri === 0);
+      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r, ri === 0, ri);
     });
 
     if(others.length){
@@ -1561,9 +1570,8 @@
 
       + '<div class="band"><div class="stack">'
       + '<span class="tag">SAVE</span>'
-      + '<canvas id="card" width="1080" height="1350"></canvas>'
+      + '<p class="hint">코스별 카드는 위 각 코스의 지도 아래 “이 코스 카드 저장” 버튼으로 저장합니다.</p>'
       + '<div class="btnrow">'
-      + '<button class="btn solid" id="dl">코스 카드 저장</button>'
       + '<button class="btn quiet" id="back">기준 바꾸기</button>'
       + (state.fromSelfMap ? '<button class="btn quiet" id="manual2">지역·동행 직접 정하기</button>' : '')
       + '<button class="btn quiet" id="again">처음부터</button>'
@@ -1572,7 +1580,6 @@
       + '</div></div>';
 
     app.innerHTML = h;
-    drawCard(theme, RG, course, prioSet);
 
     (function(){
       var note = document.getElementById("locNote");
@@ -1601,7 +1608,9 @@
         save(); render();
       };
     });
-    document.getElementById("dl").onclick = saveCard;
+    Array.prototype.forEach.call(app.querySelectorAll(".saveRouteBtn"), function(b){
+      b.onclick = function(){ saveRouteCard(+b.getAttribute("data-idx")); };
+    });
     document.getElementById("back").onclick = function(){ state.step = STEPS.indexOf("prio"); save(); render(); };
     var m2 = document.getElementById("manual2");
     if(m2) m2.onclick = function(){ state.step = 0; save(); render(); };
@@ -1617,141 +1626,74 @@
     ? (location.origin + location.pathname).replace(/index\.html$/, "").replace(/^https?:\/\//, "")
     : "나에게 맞는 하루";
 
-  function wrapKo(c, text, maxW){
-    var lines = [], line = "";
-    for(var i = 0; i < text.length; i++){
-      var t = line + text[i];
-      if(c.measureText(t).width > maxW && line){ lines.push(line); line = text[i]; }
-      else line = t;
-    }
-    if(line) lines.push(line);
-    return lines;
-  }
-
-  function drawCard(theme, RG, course, prioSet){
-    var cv = document.getElementById("card");
-    if(!cv) return;
-    var c = cv.getContext("2d"), W = 1080, H = 1350, PAD = 84;
-
-    c.fillStyle = "#150E1E"; c.fillRect(0, 0, W, H);
-    var g = c.createRadialGradient(540, 1280, 0, 540, 1280, 900);
-    g.addColorStop(0, "rgba(255,159,90,.24)"); g.addColorStop(1, "rgba(255,159,90,0)");
-    c.fillStyle = g; c.fillRect(0, 0, W, H);
-    var g2 = c.createRadialGradient(540, 40, 0, 540, 40, 700);
-    g2.addColorStop(0, "rgba(92,224,206,.12)"); g2.addColorStop(1, "rgba(92,224,206,0)");
-    c.fillStyle = g2; c.fillRect(0, 0, W, H);
-    var g3 = c.createRadialGradient(900, 300, 0, 900, 300, 500);
-    g3.addColorStop(0, "rgba(183,156,255,.10)"); g3.addColorStop(1, "rgba(183,156,255,0)");
-    c.fillStyle = g3; c.fillRect(0, 0, W, H);
-
-    var F = '"Pretendard Variable", Pretendard, "Gothic A1", sans-serif';
-    var M = '"Martian Mono", Consolas, monospace';
-
-    c.fillStyle = "#8D7C93"; c.font = '500 20px ' + M;
-    c.fillText("오늘 당신의 여행 테마", PAD, 112);
-    c.strokeStyle = "#3A2A42"; c.lineWidth = 2;
-    c.setLineDash([2, 10]);
-    c.beginPath(); c.moveTo(PAD, 146); c.lineTo(W - PAD, 146); c.stroke();
-    c.setLineDash([]);
-
-    c.fillStyle = "#FF9F5A"; c.font = '900 60px ' + F;
-    c.shadowColor = "rgba(255,159,90,.4)"; c.shadowBlur = 40;
-    var tl = wrapKo(c, "〈" + theme + "〉", W - PAD * 2), y = 236;
-    for(var i = 0; i < Math.min(tl.length, 3); i++){ c.fillText(tl[i], PAD, y); y += 74; }
-    c.shadowBlur = 0;
-
-    c.fillStyle = "#FBF2E6"; c.font = '700 34px ' + F;
-    c.fillText(RG.n, PAD, y + 12);
-    c.fillStyle = "#8D7C93"; c.font = '400 24px ' + F;
-    c.fillText(RG.s, PAD + c.measureText(RG.n).width + 130, y + 12);
-
-    var py = y + 62;
-    c.font = '500 23px ' + F;
-    var px = PAD;
-    state.prio.forEach(function(pk){
-      var cr = CRIT[CI[pk]];
-      var t = cr.e + " " + cr.t, w = c.measureText(t).width + 30;
-      c.strokeStyle = "#B0602F"; c.lineWidth = 2;
-      c.beginPath();
-      c.moveTo(px + 21, py - 26); c.lineTo(px + w - 21, py - 26);
-      c.arcTo(px + w, py - 26, px + w, py - 5, 21);
-      c.lineTo(px + w, py - 5); c.arcTo(px + w, py + 16, px + w - 21, py + 16, 21);
-      c.lineTo(px + 21, py + 16); c.arcTo(px, py + 16, px, py - 5, 21);
-      c.lineTo(px, py - 5); c.arcTo(px, py - 26, px + 21, py - 26, 21);
-      c.closePath(); c.stroke();
-      c.fillStyle = "#FF9F5A"; c.fillText(t, px + 15, py + 2);
-      px += w + 10;
+  function fileToDataURI(url){
+    return fetch(url).then(function(r){ return r.blob(); }).then(function(blob){
+      return new Promise(function(resolve, reject){
+        var reader = new FileReader();
+        reader.onload = function(){ resolve(reader.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     });
+  }
 
-    var cy = py + 78;
-    c.strokeStyle = "#3A2A42"; c.lineWidth = 2;
-    c.setLineDash([2, 10]);
-    c.beginPath(); c.moveTo(PAD, cy - 44); c.lineTo(W - PAD, cy - 44); c.stroke();
-    c.setLineDash([]);
-    c.fillStyle = "#8D7C93"; c.font = '500 18px ' + M;
-    c.fillText("YOUR DAY", PAD, cy - 8);
+  function svgToBlobPNG(svgEl, scale){
+    return (async function(){
+      try{
+        var w = +svgEl.getAttribute("width"), h = +svgEl.getAttribute("height");
+        var clone = svgEl.cloneNode(true);
+        clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        // <image href="img/...">를 그대로 두면, blob URL로 분리된 SVG를 <img>로 그릴 때
+        // 브라우저가 보안상 그 안의 외부 리소스 요청을 막아 사진이 깨진 아이콘으로 나온다.
+        // 요청 자체가 필요 없도록 사진을 미리 data URI로 인라인한다.
+        var imgEls = Array.prototype.slice.call(clone.querySelectorAll("image"));
+        await Promise.all(imgEls.map(async function(im){
+          var href = im.getAttribute("href");
+          if(!href) return;
+          try{
+            var dataUri = await fileToDataURI(new URL(href, location.href).href);
+            im.setAttribute("href", dataUri);
+          }catch(e){ im.remove(); }
+        }));
+        var xml = new XMLSerializer().serializeToString(clone);
+        var svgBlob = new Blob([xml], { type: "image/svg+xml;charset=utf-8" });
+        var url = URL.createObjectURL(svgBlob);
+        return await new Promise(function(resolve){
+          var img = new Image();
+          img.onload = function(){
+            var cv = document.createElement("canvas");
+            cv.width = w * scale; cv.height = h * scale;
+            var ctx = cv.getContext("2d");
+            ctx.drawImage(img, 0, 0, cv.width, cv.height);
+            URL.revokeObjectURL(url);
+            cv.toBlob(function(blob){ resolve(blob); }, "image/png");
+          };
+          img.onerror = function(){ URL.revokeObjectURL(url); resolve(null); };
+          img.src = url;
+        });
+      }catch(e){ return null; }
+    })();
+  }
 
-    var avail = H - 150 - cy;
-    var step = Math.max(72, Math.min(150, Math.floor(avail / Math.max(course.length, 1))));
-    var SLOTCOL = { m:"#FFD98A", l:"#FFB562", a:"#FF9F5A", s:"#FF7A6B", e:"#B79CFF" };
-    course.forEach(function(lg, idx){
-      var yy = cy + 44 + idx * step;
-      var col = SLOTCOL[lg.slot.k] || "#FF9F5A";
-      c.fillStyle = col; c.font = '700 20px ' + M;
-      c.fillText(lg.slot.t, PAD, yy);
-      c.fillStyle = "#8D7C93"; c.font = '400 17px ' + M;
-      c.fillText(lg.slot.h, PAD, yy + 26);
-
-      c.fillStyle = "#4F3B58";
-      c.fillRect(PAD + 108, yy - 26, 2, step - 6);
-      c.beginPath(); c.arc(PAD + 109, yy - 7, 6, 0, Math.PI * 2);
-      c.fillStyle = col; c.fill();
-
-      c.fillStyle = "#FBF2E6"; c.font = '800 38px ' + F;
-      c.fillText(lg.it.sp.n, PAD + 140, yy + 4);
-      c.fillStyle = "#8D7C93"; c.font = '400 20px ' + F;
-      c.fillText(lg.it.sp.c, PAD + 140, yy + 34);
+  function saveRouteCard(idx){
+    var svg = document.getElementById("routemapSvg" + idx);
+    if(!svg) return;
+    svgToBlobPNG(svg, 2).then(function(blob){
+      if(!blob){ toast("저장에 실패했습니다"); return; }
+      var file = new File([blob], "나의하루_코스" + (idx + 1) + ".png", { type: "image/png" });
+      if(navigator.canShare && navigator.canShare({ files: [file] })){
+        navigator.share({ files: [file], title: "나의 하루 코스" }).then(function(){
+          toast("저장했습니다");
+        }).catch(function(){});
+        return;
+      }
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = "나의하루_코스" + (idx + 1) + ".png";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+      toast("저장했습니다");
     });
-
-    c.strokeStyle = "#3A2A42"; c.lineWidth = 2;
-    c.setLineDash([2, 10]);
-    c.beginPath(); c.moveTo(PAD, H - 92); c.lineTo(W - PAD, H - 92); c.stroke();
-    c.setLineDash([]);
-    c.fillStyle = "#8D7C93"; c.font = '400 20px ' + M;
-    c.fillText("MY DAY · 7 CRITERIA", PAD, H - 48);
-    c.textAlign = "right"; c.fillText(SITE, W - PAD, H - 48); c.textAlign = "left";
-  }
-
-  function resetAfterSave(){
-    setTimeout(function(){
-      state = { step:-1, area:null, prio:[], who:null, walk:null, move:null };
-      save(); resumable = false; render();
-    }, 2600);
-  }
-
-  function saveCard(){
-    var cv = document.getElementById("card");
-    if(!cv) return;
-    try{
-      cv.toBlob(function(blob){
-        if(!blob){ toast("저장에 실패했습니다"); return; }
-        var file = new File([blob], "나의하루_코스.png", { type: "image/png" });
-        if(navigator.canShare && navigator.canShare({ files: [file] })){
-          navigator.share({ files: [file], title: "나의 하루 코스" }).then(function(){
-            toast("저장했습니다 · 곧 처음 화면으로 돌아갑니다");
-            resetAfterSave();
-          }).catch(function(){});
-          return;
-        }
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url; a.download = "나의하루_코스.png";
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
-        toast("저장했습니다 · 곧 처음 화면으로 돌아갑니다");
-        resetAfterSave();
-      }, "image/png");
-    }catch(e){ toast("저장에 실패했습니다"); }
   }
 
   if(document.fonts && document.fonts.ready){
