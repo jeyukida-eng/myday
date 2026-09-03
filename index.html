@@ -1308,7 +1308,6 @@
         + '<div class="loc">' + esc(sp.c) + '</div>'
         + '<p class="ln">' + esc(sp.one) + '</p>'
         + '<p class="st"><b>여기 이런 이야기가</b> — ' + esc(sp.story) + '</p>'
-        + s7html(sp, prioSet)
         + '<a class="mapl" href="' + mapURL(sp.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
         + (lg.alt ? '<p class="altl">이 시간대 대안 — <b>' + esc(lg.alt) + '</b></p>' : '')
         + (lg.pt ? ptHTML(lg.pt) : '')
@@ -1351,22 +1350,6 @@
       + (t.ben ? '<p class="ben">' + esc(t.ben) + '</p>' : '')
       + '<a class="mapl" href="' + mapURL(t.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
       + '</div>';
-  }
-
-  function s7html(sp, prioSet){
-    var h = '<div class="s7">';
-    CRIT.forEach(function(c, idx){
-      var hi = !!prioSet[c.k], v = sp.s[idx], bars = "";
-      for(var j = 0; j < 5; j++) bars += '<i class="' + (j < v ? "on" : "") + '"></i>';
-      h += '<span class="k' + (hi ? " hi" : "") + '">' + esc(c.ax) + '</span>'
-        + '<span class="st5' + (hi ? " hi" : "") + '">' + bars + '</span>'
-        + '<span class="v' + (hi ? " hi" : "") + '">' + v + '</span>';
-    });
-    var cap = state.prio.map(function(k){
-      return CRIT[CI[k]].ax + " " + sp.s[CI[k]] + "/5";
-    }).join("  ·  ");
-    h += '<span class="s7cap">당신이 고른 기준 — ' + esc(cap) + '</span></div>';
-    return h;
   }
 
   function renderResult(){
