@@ -938,34 +938,35 @@
     { k:"e", t:"저녁", h:"19:30" }
   ];
 
-  var NEAR = 8;   // 같은 시·군에 붙는 보너스 (동선 penalty 대신)
+  var TRAVEL_PENALTY = 1.4;   // 이동 1분당 매칭 점수 감점 — 실제 동선 기준으로 다음 장소를 고른다
 
   function buildCourse(list, region){
     var pool = list.filter(function(it){ return it.sp.r === region; })
                    .sort(function(a, b){ return b.v - a.v; });
     if(!pool.length) return [];
 
-    var anchor = pool[0].sp.c;      // 가장 잘 맞는 스팟의 시·군을 하루의 거점으로 잡는다
     var used = {}, course = [];
 
     SLOTS.forEach(function(sl){
+      var prevCity = course.length ? course[course.length - 1].it.sp.c : null;
       var cand = pool.filter(function(it){
         return it.sp.sl.indexOf(sl.k) >= 0 && !used[it.sp.n];
       }).map(function(it){
-        return { it:it, adj:it.v + (it.sp.c === anchor ? NEAR : 0) };
+        var penalty = prevCity ? travelMin(region, prevCity, it.sp.c) * TRAVEL_PENALTY : 0;
+        return { it:it, adj:it.v - penalty };
       }).sort(function(a, b){ return b.adj - a.adj; });
 
       if(!cand.length) return;
       if(cand[0].it.v < 50 && course.length >= 3) return;
 
-      var prev = course.length ? course[course.length - 1].it.sp.c : null;
-      var sameCity = prev === null || prev === cand[0].it.sp.c;
-      used[cand[0].it.sp.n] = 1;
+      var sp = cand[0].it.sp;
+      var sameCity = prevCity === null || prevCity === sp.c;
+      used[sp.n] = 1;
       course.push({
         slot:sl,
         it:cand[0].it,
         alt:cand[1] ? cand[1].it.sp.n : null,
-        move: sameCity ? null : { city:cand[0].it.sp.c, min:travelMin(region, prev, cand[0].it.sp.c) }
+        move: sameCity ? null : { city:sp.c, min:travelMin(region, prevCity, sp.c) }
       });
     });
     return course;
@@ -1001,6 +1002,13 @@
     return (ch - 0xAC00) % 28 !== 0;
   }
   function josa(w, a, b){ return hasJong(w) ? a : b; }
+  /* '으로/로' 전용 — 받침이 ㄹ이면 '로', 받침 없어도 '로', 그 외 받침은 '으로' */
+  function roJosa(w){
+    var s = String(w).replace(/[^가-힣]/g, "");
+    if(!s) return "로";
+    var jong = (s.charCodeAt(s.length - 1) - 0xAC00) % 28;
+    return (jong === 0 || jong === 8) ? "로" : "으로";
+  }
   function mapURL(q){ return "https://map.naver.com/p/search/" + encodeURIComponent(q); }
 
   function toast(msg){
@@ -1224,7 +1232,7 @@
       if(idx > 0) h += '<div class="conn">'
         + (lg.move
             ? '차로 약 <b style="color:var(--sun);font-weight:700">' + lg.move.min + '분</b> 이동 · '
-              + esc(lg.move.city) + josa(lg.move.city, "으로", "로")
+              + esc(lg.move.city) + roJosa(lg.move.city)
             : '같은 동네 · 차로 5~15분')
         + '</div>';
       h += '<div class="lcard' + (idx === 0 ? " key" : "") + '">'
@@ -1341,6 +1349,8 @@
             : [whoT, walkT, moveT].filter(Boolean).map(esc).join(' · ')
               + ' 기준으로 전국 ' + SPOT.length + '개 스팟을 7기준 점수로 매칭한 코스 3가지입니다.')
       + '</p>'
+      + '<p class="hint"><b>서로 다른 지역의 대안입니다 — 이 중 하나만 골라 하루를 보내면 됩니다.</b> '
+      + '한 코스 안의 장소끼리는 가깝지만, 순위가 다른 코스끼리는(예: 서귀포 코스 ↔ 제주시 코스) 차로 40분 이상 떨어져 있을 수 있어 같은 날 오가는 걸 권하지 않습니다.</p>'
       + '</div></div>'
 
       + campaignBlock(best.r);
