@@ -1214,7 +1214,69 @@
     return h + '</div></div>';
   }
 
-  function courseBlockHTML(course, RG, rankLabel, prioSet){
+  /* ============ 권역별 추천 맛집 · 카페 ============
+     네이버/구글 리뷰·평점, 방송·매체 언급 등을 실제로 확인해 고른 곳입니다.
+     조사 시점(2026-09) 기준이며, 영업시간·휴무일·평점은 방문 전 다시 확인하세요.
+  ================================================== */
+  var FOOD = {
+    JJE:{ restaurant:{ name:"명진전복", city:"제주 구좌", reason:"제주 앞바다 전복으로 끓인 진한 전복돌솥밥", q:"제주 구좌 명진전복" },
+          cafe:{ name:"표선하다", city:"제주 표선", reason:"통유리 너머로 표선 바다가 한눈에 들어옵니다", q:"제주 표선 표선하다" } },
+    JJW:{ restaurant:{ name:"고도칸 애월흑돼지", city:"제주 애월", reason:"노을 보며 즐기는 직원 그릴링 애월 흑오겹살", q:"제주 애월 고도칸 흑돼지" },
+          cafe:{ name:"봄날카페", city:"제주 애월", reason:"한담해변 카페거리, 그림 같은 일몰 명소", q:"제주 애월 한담해변 봄날카페" } },
+    JJS:{ restaurant:{ name:"궤네깃도", city:"서귀포 중문", reason:"간장게장 곁들인 화산석 불판 중문 대표 흑돼지", q:"서귀포 중문 궤네깃도" },
+          cafe:{ name:"바다바라 카페&베이커리", city:"서귀포 색달", reason:"색달해변 절벽 위, 마라도까지 보이는 파노라마 뷰", q:"서귀포 색달해변 바다바라" } },
+    JJC:{ restaurant:{ name:"우진해장국", city:"제주시 원도심", reason:"고사리 듬뿍 넣어 끓인 제주 향토 해장국 원조", q:"제주시 삼도이동 우진해장국" },
+          cafe:{ name:"델문도", city:"제주 함덕", reason:"함덕해변 바로 앞, 에메랄드빛 바다가 펼쳐지는 베이커리", q:"제주 함덕 델문도" } },
+    BSN:{ restaurant:{ name:"18번완당집", city:"부산 남포동", reason:"1948년부터 3대째 이어온 완당 노포", q:"부산 남포동 18번완당집" },
+          cafe:{ name:"에테르", city:"부산 영도", reason:"4층 전체가 통유리 오션뷰, 노을 무렵이 절정", q:"부산 영도 흰여울문화마을 에테르" } },
+    GWD:{ restaurant:{ name:"정은숙초당순두부", city:"강릉", reason:"국내산 콩으로 만든 수제 순두부 전문점", q:"강릉 정은숙초당순두부" },
+          cafe:{ name:"보사노바 강릉본점", city:"강릉", reason:"안목해변이 내려다보이는 루프탑 스페셜티 카페", q:"강릉 안목해변 보사노바" } },
+    GJP:{ restaurant:{ name:"수향회식당", city:"포항 죽도시장", reason:"44년 전통 포항식 물회, 주말엔 종일 줄을 섭니다", q:"포항 죽도시장 수향회식당" },
+          cafe:{ name:"페이지나인", city:"경주 보문", reason:"보문호 바로 앞, 야외 빈백 자리가 인기", q:"경주 보문호 페이지나인" } },
+    TYG:{ restaurant:{ name:"뚱보할매김밥", city:"통영 강구안", reason:"70년 전통 원조 충무김밥, 강구안 대표 맛집", q:"통영 강구안 뚱보할매김밥" },
+          cafe:{ name:"카페 녘", city:"통영 중앙시장", reason:"7층 전망대가 360도로 돌며 통영 바다를 보여줍니다", q:"통영 중앙시장 카페 녘" } },
+    JJB:{ restaurant:{ name:"신뱅이", city:"전주 한옥마을", reason:"한옥 건물에서 먹는 백김치 콩나물국밥", q:"전주 한옥마을 신뱅이" },
+          cafe:{ name:"이성당", city:"군산 근대문화거리", reason:"국내에서 가장 오래된 빵집, 단팥빵은 항상 줄섭니다", q:"군산 근대문화거리 이성당" } },
+    YSS:{ restaurant:{ name:"정다운식당", city:"여수 돌산", reason:"비린내 없는 시원한 돌게장이 인기 메뉴", q:"여수 돌산 정다운식당" },
+          cafe:{ name:"카페 모이핀", city:"여수 돌산", reason:"통유리 너머 돌산 바다가 펼쳐지는 대형 루프탑", q:"여수 돌산 무술목 카페 모이핀" } },
+    DGA:{ restaurant:{ name:"미성당 납작만두", city:"대구 서문시장", reason:"대구10미 선정, 50년 전통 납작만두 원조집", q:"대구 서문시장 미성당 납작만두" },
+          cafe:{ name:"미도다방", city:"대구 근대골목", reason:"1928년 개업, 노른자 동동 쌍화차가 명물", q:"대구 근대골목 미도다방" } },
+    SEL:{ restaurant:{ name:"우래옥", city:"서울 을지로", reason:"1946년부터 이어온 정통 평양냉면집", q:"을지로 우래옥" },
+          cafe:{ name:"어니언 성수", city:"서울 성수", reason:"옛 공장을 개조한 성수동 대표 베이커리 카페", q:"성수 어니언 성수" } },
+    GGP:{ restaurant:{ name:"명지쉼터가든", city:"가평", reason:"가평 특산물 잣으로 만든 잣국수 원조집", q:"가평 명지쉼터가든" },
+          cafe:{ name:"카페 자라나루", city:"가평 자라섬", reason:"자라섬 물 위에 떠 있는 듯한 수상 카페", q:"가평 자라섬 카페 자라나루" } },
+    GGJ:{ restaurant:{ name:"DMZ장단콩두부마을", city:"파주 임진각", reason:"장단콩으로 만든 순두부정식이 유명합니다", q:"파주 임진각 DMZ장단콩두부마을" },
+          cafe:{ name:"더티트렁크", city:"파주 출판도시", reason:"국내 최대급 규모의 창고형 감성 카페", q:"파주 더티트렁크" } },
+    GGH:{ restaurant:{ name:"용흥궁식당", city:"강화도", reason:"돼지고기와 새우젓을 끓인 강화 향토음식 전문점", q:"강화도 용흥궁식당" },
+          cafe:{ name:"조양방직", city:"강화도", reason:"1933년 방직공장을 개조한 강화 대표 카페", q:"강화도 조양방직" } },
+    CCD:{ restaurant:{ name:"그집쏘가리", city:"단양", reason:"남한강에서 잡은 쏘가리로 끓인 매운탕이 일품", q:"단양 그집쏘가리" },
+          cafe:{ name:"카페산", city:"단양 가곡", reason:"패러글라이딩 활공장 옆 산 정상 뷰 카페", q:"단양 카페산" } },
+    CCG:{ restaurant:{ name:"백제의집", city:"부여", reason:"연잎에 밥을 쪄낸 부여 향토음식 전문점", q:"부여 백제의집" },
+          cafe:{ name:"루치아의뜰", city:"공주", reason:"공주 구도심 골목 안 조용한 한옥 카페", q:"공주 루치아의뜰" } },
+    CCT:{ restaurant:{ name:"솔밭가든", city:"안면도", reason:"우럭젓국과 게국지가 유명한 안면도 로컬 맛집", q:"안면도 솔밭가든" },
+          cafe:{ name:"카페 아일", city:"안면도 꽃지해변", reason:"꽃지해변 앞 노을 명소로 꼽히는 오션뷰 카페", q:"안면도 꽃지해변 카페 아일" } }
+  };
+
+  function foodHTML(regionCode){
+    var f = FOOD[regionCode];
+    if(!f) return "";
+    function row(badge, item){
+      return '<div class="pt"><div class="h"><span class="badge">' + badge + '</span>'
+        + '<span class="kind">' + esc(item.city) + '</span></div>'
+        + '<div class="nm2">' + esc(item.name) + '</div>'
+        + '<p class="sig">' + esc(item.reason) + '</p>'
+        + '<a class="mapl" href="' + mapURL(item.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
+        + '</div>';
+    }
+    return '<div class="conn">이 지역 맛집 · 카페</div>'
+      + '<div class="lcard">'
+      + '<div class="nm" style="margin-bottom:2px">추천 한 곳씩</div>'
+      + '<div class="loc">리뷰·평점 확인 후 고른 곳 · 방문 전 영업시간 재확인</div>'
+      + row("맛집", f.restaurant) + row("카페", f.cafe)
+      + '</div>';
+  }
+
+  function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode){
     var ptUsed = {}, liveCount = 0;
     course.forEach(function(lg){
       var t = partnerFor(lg.it.sp, lg.slot.k, ptUsed);
@@ -1252,6 +1314,8 @@
         + (lg.pt ? ptHTML(lg.pt) : '')
         + '</div>';
     });
+
+    if(course.length && regionCode) h += foodHTML(regionCode);
 
     if(course.length){
       var stampBase = course.length, bonus = liveCount * 2;
@@ -1358,7 +1422,7 @@
     var RANK_LABEL = ["1순위", "2순위", "3순위"];
     top3.forEach(function(r, ri){
       var c = ri === 0 ? course : buildCourse(list, r.r);
-      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet);
+      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r);
     });
 
     if(others.length){
