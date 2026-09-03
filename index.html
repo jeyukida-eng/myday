@@ -119,6 +119,7 @@
   .prio span.off{border-color:var(--hair);color:var(--txt-3);background:transparent}
 
   /* 코스 카드 */
+  .routemap{margin:16px 0 4px;padding:14px 0;background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-lg)}
   .course{display:flex;flex-direction:column;gap:0}
   .conn{display:flex;justify-content:center;margin:6px 0}
   .conn{width:fit-content;margin-left:auto;margin-right:auto;background:var(--surface);border:1px solid var(--hair-2);border-radius:var(--r-pill);padding:8px 16px;color:var(--txt-2);font-size:12px}
@@ -1296,6 +1297,62 @@
       + ' · 총 ' + hh + '시간' + (mm ? ' ' + mm + '분' : '');
   }
 
+  /* ============ 지도형 코스 트랙 (사진 버블 + 점선 경로) ============
+     스팟에 sp.img(사진 URL)가 있으면 실사진, 없으면 시간대 아이콘 플레이스홀더로 렌더링.
+     세로 지그재그(좌우 교차)로 배치해 375px 모바일 폭에서도 잘립니다 없이 보이도록 설계.
+  ==================================================== */
+  var SLOT_ICON = { m:"☀️", l:"🍚", a:"📍", s:"🌇", e:"🌙" };
+
+  function routeMapSVG(course){
+    if(!course.length) return "";
+    var W = 340, R = 46, PADX = 74, GAPY = 172, TOP = 80;
+    var H = TOP + (course.length - 1) * GAPY + R + 60;
+    var pts = course.map(function(lg, i){
+      return { x: i % 2 === 0 ? PADX : (W - PADX), y: TOP + i * GAPY, lg: lg };
+    });
+
+    var defs = "", circles = "", labels = "", path = "";
+
+    // 점선 경로 — 점들을 부드러운 곡선으로 연결
+    if(pts.length > 1){
+      var d = "M" + pts[0].x + "," + pts[0].y;
+      for(var i = 1; i < pts.length; i++){
+        var p0 = pts[i - 1], p1 = pts[i];
+        var midY = (p0.y + p1.y) / 2;
+        d += " C" + p0.x + "," + midY + " " + p1.x + "," + midY + " " + p1.x + "," + p1.y;
+      }
+      path = '<path d="' + d + '" fill="none" stroke="var(--sun-deep)" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>';
+    }
+
+    pts.forEach(function(p, i){
+      var sp = p.lg.it.sp, cid = "clip" + i + "_" + Math.random().toString(36).slice(2, 7);
+      var img = sp.img;
+      if(img){
+        defs += '<clipPath id="' + cid + '"><circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '"/></clipPath>';
+        circles += '<image href="' + esc(img) + '" x="' + (p.x - (R - 4)) + '" y="' + (p.y - (R - 4)) + '" '
+          + 'width="' + (R - 4) * 2 + '" height="' + (R - 4) * 2 + '" preserveAspectRatio="xMidYMid slice" clip-path="url(#' + cid + ')"/>';
+      } else {
+        circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '" fill="var(--deep)"/>'
+          + '<text x="' + p.x + '" y="' + (p.y + 9) + '" font-size="30" text-anchor="middle">' + (SLOT_ICON[p.lg.slot.k] || "📍") + '</text>';
+      }
+      circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + R + '" fill="none" stroke="' + (i === 0 ? "var(--sun)" : "var(--hair-2)") + '" stroke-width="3"/>';
+      circles += '<circle cx="' + p.x + '" cy="' + (p.y - R + 2) + '" r="12" fill="var(--sun)"/>'
+        + '<text x="' + p.x + '" y="' + (p.y - R + 6) + '" font-size="10" font-weight="700" text-anchor="middle" fill="#2A1206">' + (i + 1) + '</text>';
+
+      var name = sp.n.length > 13 ? sp.n.slice(0, 12) + "…" : sp.n;
+      var lx = p.x, anchor = "middle", ly = p.y + R + 24;
+      labels += '<text x="' + lx + '" y="' + ly + '" font-size="14" font-weight="700" fill="var(--txt)" text-anchor="' + anchor + '">' + esc(name) + '</text>'
+        + '<text x="' + lx + '" y="' + (ly + 17) + '" font-size="10" fill="var(--txt-3)" text-anchor="' + anchor + '">' + esc(p.lg.slot.t) + ' ' + esc(p.lg.slot.h) + '</text>';
+    });
+
+    return '<div class="routemap"><svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="max-width:' + W + 'px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">'
+      + '<defs>' + defs + '</defs>'
+      + path + circles + labels
+      + '</svg>'
+      + (course.some(function(lg){ return lg.it.sp.img; }) ? '' : '<p class="hint" style="text-align:center;margin-top:6px">사진은 순차적으로 채워질 예정입니다 — 지금은 시간대 아이콘으로 표시됩니다</p>')
+      + '</div>';
+  }
+
   function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode, showLocNote){
     var ptUsed = {}, liveCount = 0;
     course.forEach(function(lg){
@@ -1309,6 +1366,7 @@
       + '<br>' + esc(RG.mv) + '</p>'
       + '<p class="hint">🕒 ' + durationLabel(course) + '</p>'
       + (showLocNote ? '<p class="hint" id="locNote">📍 위치 확인 중 — 브라우저에 위치 권한을 허용하면 현재 위치에서 첫 장소까지 대략 거리를 보여드립니다.</p>' : '')
+      + routeMapSVG(course)
       + '<div class="course">';
 
     course.forEach(function(lg, idx){
