@@ -1579,7 +1579,9 @@
       if(!note || !navigator.geolocation || RG.lat == null) { if(note) note.remove(); return; }
       navigator.geolocation.getCurrentPosition(function(pos){
         var km = haversineKm(pos.coords.latitude, pos.coords.longitude, RG.lat, RG.lng);
-        var isJejuTrip = best.r && best.r.indexOf("JJ") === 0 && km > 30;
+        var userOnJeju = pos.coords.latitude >= 33.05 && pos.coords.latitude <= 33.60
+          && pos.coords.longitude >= 126.05 && pos.coords.longitude <= 126.99;
+        var isJejuTrip = best.r && best.r.indexOf("JJ") === 0 && !userOnJeju;
         if(isJejuTrip){
           note.innerHTML = '📍 현재 위치에서 ' + esc(RG.n) + '까지 직선거리 약 <b style="color:var(--sun)">' + km.toFixed(0) + 'km</b>'
             + ' · 바다 건너라 항공편 이용을 권합니다 (공항~코스 시작지 이동시간은 별도)';
@@ -1731,18 +1733,24 @@
     var cv = document.getElementById("card");
     if(!cv) return;
     try{
-      var url = cv.toDataURL("image/png");
-      if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
-        var w = window.open();
-        if(w){ w.document.write('<img src="' + url + '" style="width:100%">'); toast("이미지를 길게 눌러 저장하세요 · 곧 처음 화면으로 돌아갑니다"); resetAfterSave(); }
-        else toast("팝업이 차단되었습니다");
-        return;
-      }
-      var a = document.createElement("a");
-      a.href = url; a.download = "나의하루_코스.png";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      toast("저장했습니다 · 곧 처음 화면으로 돌아갑니다");
-      resetAfterSave();
+      cv.toBlob(function(blob){
+        if(!blob){ toast("저장에 실패했습니다"); return; }
+        var file = new File([blob], "나의하루_코스.png", { type: "image/png" });
+        if(navigator.canShare && navigator.canShare({ files: [file] })){
+          navigator.share({ files: [file], title: "나의 하루 코스" }).then(function(){
+            toast("저장했습니다 · 곧 처음 화면으로 돌아갑니다");
+            resetAfterSave();
+          }).catch(function(){});
+          return;
+        }
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url; a.download = "나의하루_코스.png";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+        toast("저장했습니다 · 곧 처음 화면으로 돌아갑니다");
+        resetAfterSave();
+      }, "image/png");
     }catch(e){ toast("저장에 실패했습니다"); }
   }
 
