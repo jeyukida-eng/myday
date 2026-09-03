@@ -757,6 +757,47 @@
     "물이 빠지면 갯벌이 끝없이 드러납니다.",
     "강화 남단 갯벌은 세계 5대 갯벌로 꼽힙니다.","강화 동막해변");
 
+  /* ============ 스팟 사진 (1단계: 제주 4개 권역) ============
+     전량 위키미디어 커먼즈 CC0 / CC BY / CC BY-SA 라이선스 확인 후 사용.
+     출처 표시는 IMG_CREDIT에 따로 보관, 결과 화면 하단에 노출.
+  ==================================================== */
+  var IMG_MAP = {
+    "성산일출봉":"img/JJE_01.jpg", "광치기 해변":"img/JJE_02.jpg", "비자림":"img/JJE_03.jpg",
+    "해녀박물관 · 해녀밥상":"img/JJE_05.jpg", "성읍민속마을":"img/JJE_06.jpg", "섭지코지":"img/JJE_08.jpg",
+    "월정리 해변":"img/JJE_09.jpg", "아부오름":"img/JJE_10.jpg", "김녕 성세기 해변":"img/JJE_12.jpg",
+    "표선 해비치 해변":"img/JJE_13.jpg",
+    "한담 해안산책로":"img/JJW_01.jpg", "새별오름":"img/JJW_02.jpg", "금능 · 협재 해변":"img/JJW_03.jpg",
+    "수월봉 엉알길":"img/JJW_05.jpg", "애월 해안도로 카페거리":"img/JJW_07.jpg", "산방산 · 용머리해안":"img/JJW_08.jpg",
+    "오설록 · 서광 차밭":"img/JJW_09.jpg", "신창 풍차 해안도로":"img/JJW_10.jpg", "곽지 과물해변":"img/JJW_12.jpg",
+    "카멜리아 힐":"img/JJW_13.jpg",
+    "서귀포 매일올레시장":"img/JJS_01.jpg", "쇠소깍":"img/JJS_02.jpg", "대포 주상절리":"img/JJS_03.jpg",
+    "황우지 선녀탕 · 외돌개":"img/JJS_06.jpg", "정방폭포":"img/JJS_08.jpg", "천지연폭포":"img/JJS_09.jpg",
+    "큰엉 해안경승지":"img/JJS_10.jpg", "법환포구 해녀올레":"img/JJS_12.jpg", "서귀포 자연휴양림":"img/JJS_13.jpg",
+    "동문시장":"img/JJC_01.jpg", "삼성혈":"img/JJC_02.jpg", "사라봉 · 별도봉":"img/JJC_03.jpg",
+    "이호테우 해변":"img/JJC_04.jpg", "용두암 · 용연구름다리":"img/JJC_05.jpg", "관덕정 · 원도심 골목":"img/JJC_06.jpg",
+    "사려니숲길":"img/JJC_07.jpg", "제주민속자연사박물관":"img/JJC_09.jpg"
+  };
+  var IMG_CREDIT = {
+    "img/JJE_01.jpg":"CC BY-SA, Wikimedia Commons", "img/JJE_02.jpg":"CC BY-SA, Wikimedia Commons", "img/JJE_03.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJE_05.jpg":"CC BY-SA, Wikimedia Commons", "img/JJE_06.jpg":"CC BY-SA, Wikimedia Commons", "img/JJE_08.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJE_09.jpg":"CC BY-SA, Wikimedia Commons", "img/JJE_10.jpg":"CC BY-SA, Wikimedia Commons", "img/JJE_12.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJE_13.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJW_01.jpg":"CC BY-SA, Wikimedia Commons", "img/JJW_02.jpg":"CC BY-SA, Wikimedia Commons", "img/JJW_03.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJW_05.jpg":"CC BY-SA, Wikimedia Commons", "img/JJW_07.jpg":"CC BY-SA, Wikimedia Commons", "img/JJW_08.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJW_09.jpg":"CC BY-SA, Wikimedia Commons", "img/JJW_10.jpg":"CC BY-SA, Wikimedia Commons", "img/JJW_12.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJW_13.jpg":"CC BY-SA, Wikimedia Commons",
+    "img/JJS_01.jpg":"Seefooddiet, CC BY-SA 4.0, Wikimedia Commons", "img/JJS_02.jpg":"Jocelyndurrey, CC BY-SA 4.0, Wikimedia Commons",
+    "img/JJS_03.jpg":"Bernard Gagnon, CC0, Wikimedia Commons", "img/JJS_06.jpg":"Sgroey, CC BY-SA 4.0, Wikimedia Commons",
+    "img/JJS_08.jpg":"Giuseppe Milo, CC BY 3.0, Wikimedia Commons", "img/JJS_09.jpg":"Martin Chen, CC BY 2.0, Wikimedia Commons",
+    "img/JJS_10.jpg":"Jeju Olle Foundation, CC BY-SA 4.0, Wikimedia Commons", "img/JJS_12.jpg":"Kstevens97, CC0, Wikimedia Commons",
+    "img/JJS_13.jpg":"Grapesurgeon, CC BY-SA 4.0, Wikimedia Commons",
+    "img/JJC_01.jpg":"thddbwnd, CC BY 3.0, Wikimedia Commons", "img/JJC_02.jpg":"Abasaa, Public Domain, Wikimedia Commons",
+    "img/JJC_03.jpg":"song songroov, CC BY 3.0, Wikimedia Commons", "img/JJC_04.jpg":"Grapesurgeon, CC BY-SA 4.0, Wikimedia Commons",
+    "img/JJC_05.jpg":"Jeong seolah, CC0, Wikimedia Commons", "img/JJC_06.jpg":"Abasaa, Public Domain, Wikimedia Commons",
+    "img/JJC_07.jpg":"기나ㅏㄴ, CC BY-SA 4.0, Wikimedia Commons", "img/JJC_09.jpg":"-제주농in-, CC BY 3.0, Wikimedia Commons"
+  };
+  SPOT.forEach(function(sp){ if(IMG_MAP[sp.n]) sp.img = IMG_MAP[sp.n]; });
+
   /* ============ 입력 단계 정의 ============ */
 
   var AREAS = [
@@ -1345,11 +1386,21 @@
         + '<text x="' + lx + '" y="' + (ly + 17) + '" font-size="10" fill="var(--txt-3)" text-anchor="' + anchor + '">' + esc(p.lg.slot.t) + ' ' + esc(p.lg.slot.h) + '</text>';
     });
 
+    var creditLines = [];
+    course.forEach(function(lg){
+      var sp = lg.it.sp;
+      if(sp.img && IMG_CREDIT[sp.img]) creditLines.push(esc(sp.n) + " — " + esc(IMG_CREDIT[sp.img]));
+    });
+    var hasAnyImg = course.some(function(lg){ return lg.it.sp.img; });
+
     return '<div class="routemap"><svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="max-width:' + W + 'px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">'
       + '<defs>' + defs + '</defs>'
       + path + circles + labels
       + '</svg>'
-      + (course.some(function(lg){ return lg.it.sp.img; }) ? '' : '<p class="hint" style="text-align:center;margin-top:6px">사진은 순차적으로 채워질 예정입니다 — 지금은 시간대 아이콘으로 표시됩니다</p>')
+      + (hasAnyImg ? '' : '<p class="hint" style="text-align:center;margin-top:6px">사진은 순차적으로 채워질 예정입니다 — 지금은 시간대 아이콘으로 표시됩니다</p>')
+      + (creditLines.length
+          ? '<p class="hint" style="margin-top:10px;padding:0 14px;line-height:1.7">사진 출처 — ' + creditLines.join(' · ') + '</p>'
+          : '')
       + '</div>';
   }
 
