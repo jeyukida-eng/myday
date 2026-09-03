@@ -233,24 +233,24 @@
   /* ============ 권역 ============ */
 
   var REGION = {
-    JJE:{ n:"제주 동부", s:"성산 · 구좌 · 표선", mv:"렌터카 권장. 성산 기점 반경 20분 안에 다 모여 있습니다." },
-    JJW:{ n:"제주 서부", s:"애월 · 한림 · 한경", mv:"해안도로 한 줄로 이어집니다. 서쪽은 해 지는 방향이라 오후 일정이 유리." },
-    JJS:{ n:"제주 남부", s:"서귀포 · 중문 · 남원", mv:"서귀포 시내에 숙소를 두면 걸어서 해결되는 게 많습니다." },
-    JJC:{ n:"제주시",   s:"원도심 · 탑동 · 조천", mv:"공항에서 15분. 이 목록의 제주 권역 중 유일하게 버스만으로도 됩니다." },
-    BSN:{ n:"부산",      s:"원도심 · 해운대 · 영도", mv:"지하철과 도보로 대부분 해결됩니다. 차는 오히려 짐." },
-    GWD:{ n:"강원 영동", s:"속초 · 양양 · 강릉", mv:"KTX로 강릉까지 2시간. 시내는 도보, 그 외는 차." },
-    GJP:{ n:"경주 · 포항", s:"경주 시내 · 보문 · 죽도", mv:"경주 시내는 자전거가 최적. 포항은 차로 40분." },
-    TYG:{ n:"통영 · 거제", s:"통영 · 거제 · 남해", mv:"차 필수. 대신 해안도로 자체가 관광입니다." },
-    JJB:{ n:"전주 · 군산", s:"한옥마을 · 근대거리", mv:"두 도시 다 도보 도시. 사이는 버스로 1시간." },
-    YSS:{ n:"여수 · 순천", s:"돌산 · 순천만 · 보성", mv:"여수 시내는 걸어서, 순천만·보성은 차로 30~50분." },
-    DGA:{ n:"대구 · 안동", s:"서문시장 · 근대골목 · 하회", mv:"대구는 지하철. 안동은 차로 1시간 30분." },
-    SEL:{ n:"서울",      s:"서촌 · 성수 · 을지로", mv:"지하철만으로 완결됩니다. 이 목록에서 준비가 가장 덜 필요." },
-    GGP:{ n:"가평 · 양평", s:"북한강 · 수목원", mv:"경춘선·중앙선으로 접근됩니다. 역에서 택시가 붙습니다." },
-    GGJ:{ n:"파주",      s:"헤이리 · 출판도시 · 임진각", mv:"서울에서 1시간. 월요일 휴관이 많으니 요일을 확인하세요." },
-    GGH:{ n:"강화",      s:"성곽 · 갯벌 · 온천", mv:"서울에서 1시간 30분. 섬 안에서는 차가 편합니다." },
-    CCD:{ n:"단양",      s:"도담삼봉 · 잔도 · 구경시장", mv:"읍내 반경 15분 안에 다 모여 있습니다. 차가 없으면 이동이 어렵습니다." },
-    CCG:{ n:"공주 · 부여", s:"백제 유적", mv:"두 도시 사이 40분. 하루에 묶어도 무리가 없습니다." },
-    CCT:{ n:"태안 · 안면도", s:"서해 해변", mv:"해변 사이가 20~40분씩 걸립니다. 차 없이는 어렵습니다." }
+    JJE:{ n:"제주 동부", s:"성산 · 구좌 · 표선", mv:"렌터카 권장. 성산 기점 반경 20분 안에 다 모여 있습니다.", lat:33.4587, lng:126.9425 },
+    JJW:{ n:"제주 서부", s:"애월 · 한림 · 한경", mv:"해안도로 한 줄로 이어집니다. 서쪽은 해 지는 방향이라 오후 일정이 유리.", lat:33.4626, lng:126.3306 },
+    JJS:{ n:"제주 남부", s:"서귀포 · 중문 · 남원", mv:"서귀포 시내에 숙소를 두면 걸어서 해결되는 게 많습니다.", lat:33.2541, lng:126.5601 },
+    JJC:{ n:"제주시",   s:"원도심 · 탑동 · 조천", mv:"공항에서 15분. 이 목록의 제주 권역 중 유일하게 버스만으로도 됩니다.", lat:33.4996, lng:126.5312 },
+    BSN:{ n:"부산",      s:"원도심 · 해운대 · 영도", mv:"지하철과 도보로 대부분 해결됩니다. 차는 오히려 짐.", lat:35.0979, lng:129.0303 },
+    GWD:{ n:"강원 영동", s:"속초 · 양양 · 강릉", mv:"KTX로 강릉까지 2시간. 시내는 도보, 그 외는 차.", lat:37.7519, lng:128.8761 },
+    GJP:{ n:"경주 · 포항", s:"경주 시내 · 보문 · 죽도", mv:"경주 시내는 자전거가 최적. 포항은 차로 40분.", lat:35.8562, lng:129.2247 },
+    TYG:{ n:"통영 · 거제", s:"통영 · 거제 · 남해", mv:"차 필수. 대신 해안도로 자체가 관광입니다.", lat:34.8544, lng:128.4331 },
+    JJB:{ n:"전주 · 군산", s:"한옥마을 · 근대거리", mv:"두 도시 다 도보 도시. 사이는 버스로 1시간.", lat:35.8242, lng:127.1480 },
+    YSS:{ n:"여수 · 순천", s:"돌산 · 순천만 · 보성", mv:"여수 시내는 걸어서, 순천만·보성은 차로 30~50분.", lat:34.7604, lng:127.6622 },
+    DGA:{ n:"대구 · 안동", s:"서문시장 · 근대골목 · 하회", mv:"대구는 지하철. 안동은 차로 1시간 30분.", lat:35.8703, lng:128.5828 },
+    SEL:{ n:"서울",      s:"서촌 · 성수 · 을지로", mv:"지하철만으로 완결됩니다. 이 목록에서 준비가 가장 덜 필요.", lat:37.5446, lng:127.0559 },
+    GGP:{ n:"가평 · 양평", s:"북한강 · 수목원", mv:"경춘선·중앙선으로 접근됩니다. 역에서 택시가 붙습니다.", lat:37.8315, lng:127.5095 },
+    GGJ:{ n:"파주",      s:"헤이리 · 출판도시 · 임진각", mv:"서울에서 1시간. 월요일 휴관이 많으니 요일을 확인하세요.", lat:37.7599, lng:126.7800 },
+    GGH:{ n:"강화",      s:"성곽 · 갯벌 · 온천", mv:"서울에서 1시간 30분. 섬 안에서는 차가 편합니다.", lat:37.7465, lng:126.4878 },
+    CCD:{ n:"단양",      s:"도담삼봉 · 잔도 · 구경시장", mv:"읍내 반경 15분 안에 다 모여 있습니다. 차가 없으면 이동이 어렵습니다.", lat:36.9845, lng:128.3654 },
+    CCG:{ n:"공주 · 부여", s:"백제 유적", mv:"두 도시 사이 40분. 하루에 묶어도 무리가 없습니다.", lat:36.4465, lng:127.1189 },
+    CCT:{ n:"태안 · 안면도", s:"서해 해변", mv:"해변 사이가 20~40분씩 걸립니다. 차 없이는 어렵습니다.", lat:36.7854, lng:126.2986 }
   };
 
   /* ============ 스팟 DB ============
@@ -1002,6 +1002,13 @@
     return (ch - 0xAC00) % 28 !== 0;
   }
   function josa(w, a, b){ return hasJong(w) ? a : b; }
+  function haversineKm(lat1, lng1, lat2, lng2){
+    var R = 6371, toRad = function(d){ return d * Math.PI / 180; };
+    var dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+      + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
   /* '으로/로' 전용 — 받침이 ㄹ이면 '로', 받침 없어도 '로', 그 외 받침은 '으로' */
   function roJosa(w){
     var s = String(w).replace(/[^가-힣]/g, "");
@@ -1276,7 +1283,20 @@
       + '</div>';
   }
 
-  function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode){
+  function hhmmToMin(hhmm){
+    var p = hhmm.split(":"); return (+p[0]) * 60 + (+p[1]);
+  }
+  function durationLabel(course){
+    if(!course.length) return "";
+    var startMin = hhmmToMin(course[0].slot.h);
+    var endMin = hhmmToMin(course[course.length - 1].slot.h) + 60; // 마지막 장소에서 대략 1시간 머문다고 가정
+    var total = endMin - startMin;
+    var hh = Math.floor(total / 60), mm = total % 60;
+    return course[0].slot.h + ' 시작 → 약 ' + String(Math.floor(endMin / 60)).padStart(2, "0") + ':' + String(endMin % 60).padStart(2, "0") + ' 종료'
+      + ' · 총 ' + hh + '시간' + (mm ? ' ' + mm + '분' : '');
+  }
+
+  function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode, showLocNote){
     var ptUsed = {}, liveCount = 0;
     course.forEach(function(lg){
       var t = partnerFor(lg.it.sp, lg.slot.k, ptUsed);
@@ -1287,6 +1307,8 @@
       + '<span class="tag on">' + esc(rankLabel) + ' · ' + esc(RG.n) + '</span>'
       + '<p class="regionline"><span style="color:var(--txt-3)">' + esc(RG.s) + '</span>'
       + '<br>' + esc(RG.mv) + '</p>'
+      + '<p class="hint">🕒 ' + durationLabel(course) + '</p>'
+      + (showLocNote ? '<p class="hint" id="locNote">📍 위치 확인 중 — 브라우저에 위치 권한을 허용하면 현재 위치에서 첫 장소까지 대략 거리를 보여드립니다.</p>' : '')
       + '<div class="course">';
 
     course.forEach(function(lg, idx){
@@ -1405,7 +1427,7 @@
     var RANK_LABEL = ["1순위", "2순위", "3순위"];
     top3.forEach(function(r, ri){
       var c = ri === 0 ? course : buildCourse(list, r.r);
-      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r);
+      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r, ri === 0);
     });
 
     if(others.length){
@@ -1442,6 +1464,25 @@
 
     app.innerHTML = h;
     drawCard(theme, RG, course, prioSet);
+
+    (function(){
+      var note = document.getElementById("locNote");
+      if(!note || !navigator.geolocation || RG.lat == null) { if(note) note.remove(); return; }
+      navigator.geolocation.getCurrentPosition(function(pos){
+        var km = haversineKm(pos.coords.latitude, pos.coords.longitude, RG.lat, RG.lng);
+        var isJejuTrip = best.r && best.r.indexOf("JJ") === 0 && km > 30;
+        if(isJejuTrip){
+          note.innerHTML = '📍 현재 위치에서 ' + esc(RG.n) + '까지 직선거리 약 <b style="color:var(--sun)">' + km.toFixed(0) + 'km</b>'
+            + ' · 바다 건너라 항공편 이용을 권합니다 (공항~코스 시작지 이동시간은 별도)';
+          return;
+        }
+        var mins = Math.round(km / 0.55); // 평균 시속 약 33km(신호·정체 포함 대략치) 기준 추정
+        note.innerHTML = '📍 현재 위치에서 ' + esc(RG.n) + '까지 직선거리 약 <b style="color:var(--sun)">' + km.toFixed(0) + 'km</b>'
+          + ' · 차로 대략 ' + mins + '분 (실제 도로 경로 아닌 추정치)';
+      }, function(){
+        note.textContent = "📍 위치 확인을 허용하지 않으셨습니다 — 첫 장소까지 거리를 보려면 브라우저 위치 권한을 켜주세요.";
+      }, { timeout: 8000 });
+    })();
 
     Array.prototype.forEach.call(app.querySelectorAll(".alt[data-r]"), function(b){
       b.onclick = function(){
