@@ -1030,7 +1030,9 @@
     });
     var out = [];
     Object.keys(by).forEach(function(r){
-      var a = by[r].slice().sort(function(x, y){ return y - x; }).slice(0, 5);
+      /* 상위 5개 평균은 스팟이 많은 지역(제주 13곳 vs 그 외 4~7곳)이 후보군
+         크기만으로 계속 유리해지는 구조였다. 3개로 줄여 그 영향을 낮춘다. */
+      var a = by[r].slice().sort(function(x, y){ return y - x; }).slice(0, 3);
       var m = a.reduce(function(p, c){ return p + c; }, 0) / a.length;
       out.push({ r:r, v:m });
     });
