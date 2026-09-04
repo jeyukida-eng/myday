@@ -1,3 +1,6 @@
+<!doctype html>
+<html lang="ko">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>나에게 맞는 하루 — 취향 기반 여행 코스 추천</title>
@@ -208,11 +211,60 @@
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:99;background:var(--surface);border:1px solid var(--hair-2);border-radius:var(--r-pill);color:var(--txt);padding:12px 20px;font-size:13.5px;box-shadow:0 12px 40px rgba(0,0,0,.6)}
   .foot-note{font-size:12px;color:var(--txt-3);line-height:1.7}
 </style>
+<style id="route-app-theme">
+  :root{--void:#FFF;--deep:#FFF;--surface:#F1F8F4;--hair:#DCEAE1;--hair-2:#C7DCCE;--txt:#193D34;--txt-2:#526C60;--txt-3:#6A8174;--sun:#BE592B;--sun-deep:#E7B995;--sea:#007D68;--sea-deep:#BADBCC;--f-num:var(--f-ui)}
+  html,body{background:#FFF;word-break:keep-all;overflow-wrap:normal;font-weight:400}h1,h2,h3,h4,p,button{word-break:keep-all}.aura,.aura2,.aura3,.vig,.grain{display:none}[hidden]{display:none!important}
+  .wrap{max-width:900px;min-height:0;padding:26px 24px 30px}.band{padding:24px 0;border-top:1px solid var(--hair)}.stack{gap:16px}.tag{font-size:12px;letter-spacing:.02em}.tag.on{color:var(--sea)}
+  .themetitle{font-size:30px;line-height:1.3}.themetitle .lit,.hero .lit{color:var(--sea);text-shadow:none}.hero{font-size:36px}.prio{gap:6px}.prio span{border:0;background:#EDF6F0;color:#39725A;font-size:13px;padding:6px 11px}.prio span.off{display:none}.regionline{font-size:15px}.hint,.foot-note{font-size:13px;line-height:1.7;color:#677B70}
+  .btn{border-radius:12px;border:1px solid var(--hair-2);font-size:14px;padding:12px 18px;min-height:44px;color:var(--sea);background:white;box-shadow:none}.btn:hover{background:#EEF8F2;box-shadow:none;transform:none}.btn.solid{background:var(--sea);color:white;box-shadow:none}.btn.quiet{color:var(--txt-2)}
+  .route-tabs{display:flex;gap:8px;padding:14px 0;background:#FFF;border-bottom:1px solid var(--hair)}.route-tabs button{flex:1;border:1px solid var(--hair);border-radius:12px;background:white;color:var(--txt-2);padding:11px 10px;font-size:13px;font-weight:650;line-height:1.5;min-width:0}.route-tabs button small{font-size:11px;font-weight:400;display:block}.route-tabs button[aria-pressed="true"]{border-color:var(--sea);background:var(--sea);color:white}.route-choice>.band{border:0;padding-top:23px}
+  .course{gap:15px}.lcard{background:#FFF;box-shadow:none;border:1px solid #DCE8E0;padding:20px;border-radius:18px;overflow:hidden}.lcard.key{border-color:#8CC9AE;box-shadow:none}.lcard .top{gap:9px}.lcard .slotb{font-size:12px;padding:5px 10px;letter-spacing:0}.lcard .hh{font-size:13px;letter-spacing:0}.lcard .mt{background:#EDF8F1;color:var(--sea);font-size:13px}.lcard .mt s{font-size:10px}.tear{margin:14px 0;border-top:1px solid var(--hair)}.tear::before,.tear::after{display:none}
+  .stop-photo{width:100%;height:180px;object-fit:cover;display:block;border-radius:11px;margin-bottom:16px;background:#E8F2EC}.lcard .nm{font-size:24px;line-height:1.35}.lcard .loc{font-size:13px;letter-spacing:0}.lcard .ln{font-size:16px;margin-top:10px}.lcard .st{font-size:14px}.lcard .altl{font-size:13px}
+  .mapl{font-size:14px;letter-spacing:0;background:#E8F5ED;color:var(--sea);border:0;border-radius:10px;padding:10px 15px;margin-top:16px;font-weight:650}.mapl:hover{color:#00624F;background:#DCEEE3}.conn{font-size:13px;padding:7px 13px;margin:0 auto;background:#F0F7F2;border:0;color:#5A7F6A}
+  .place-details{margin-top:14px;border-top:1px solid var(--hair);padding-top:12px}.place-details>summary{font-size:13px;color:var(--txt-2);cursor:pointer}.s7{background:#F5F8F5;border:0}.s7 .st5 i{background:#DEEBE1}.s7 .st5 i.on{background:#92B5A0}.s7 .st5.hi i.on{background:var(--sea);box-shadow:none}.s7 .k.hi,.s7 .v.hi{color:var(--sea)}.s7 .k,.s7cap,.s7 .v{font-size:12px}
+  .route-map-details{background:#F4FAF6;border:1px solid #D7E9DF;border-radius:14px;overflow:hidden;margin-top:2px}.route-map-details>summary{font-size:14px;font-weight:650;color:var(--sea);padding:14px 16px;cursor:pointer}.routemap{background:#EDF8F3;border:0;margin:0;padding:14px 10px;border-radius:0}.routemap svg{background:#EDF8F3!important}
+  .pt{background:#F0F8F3;border:1px solid #C5DFCE}.pt .badge{background:#D1ECDB;color:#236140;font-size:11px}.pt .kind{font-size:12px}.pt .sig{font-size:14px}.pt .ben{font-size:13px}.pt.open{border-color:var(--hair)}.lcard.finish{border-color:#E6D4B4;background:#FFF8ED}.stamps i.on,.stamps i.bonus{box-shadow:none}.rw b{color:#A45622}
+  .camp{background:#FFF7E9;border:1px solid #E8D7B6}.campnone{background:#F7FAF8;border:1px dashed var(--hair);font-size:13px}.camp .src,.camp .per{font-size:12px}.warn{background:#F5F8F6;border:0;font-size:14px}.alt{font-size:15px}.alt .p{color:var(--sea);font-size:13px}
+  .pick,.crit{background:white;box-shadow:none;font-size:15px}.crit .t{font-size:16px}.crit .d,.pick small{font-size:13px}.crit[aria-pressed="true"]{border-color:var(--sea);background:#EAF7EE;box-shadow:none}.crit[aria-pressed="true"] .t{color:var(--sea)}.crit[aria-pressed="true"] .ord{background:var(--sea);color:#FFF}.pick[aria-pressed="true"]{background:#EAF7EE;box-shadow:none}.pick[aria-pressed="true"]::before{box-shadow:none}.toast{background:#193D34;color:white;border:0;box-shadow:none;font-size:14px}
+  .route-explainer{font-size:13px;color:var(--txt-2);background:#F6F9F7;border-radius:12px;padding:12px 15px}.route-explainer>summary{cursor:pointer}.route-explainer p{margin-top:10px}
+  @media(max-width:600px){.wrap{padding:21px 16px 24px}.themetitle{font-size:25px}.route-tabs{gap:6px}.route-tabs button{padding:10px 6px;font-size:12px}.lcard{padding:17px;border-radius:16px}.lcard .nm{font-size:22px}.stop-photo{height:153px}.lcard .ln{font-size:15px}.lcard .top{gap:6px}.lcard .mt s{display:none}.route-choice>.band{padding-top:20px}.course{gap:13px}.btnrow .btn{flex:1;min-width:120px}.stack{gap:14px}}
+</style>
 
+<style id="adaptive-course-theme">
+  :root,[data-mood="ocean"]{--mood:#087EAA;--mood-soft:#E6F6FC;--mood-bg:#F3FAFE;--mood-line:#BDDFEE;--mood-bold:#075A7A}
+  [data-mood="forest"]{--mood:#287A40;--mood-soft:#EAF5E6;--mood-bg:#F6FBF2;--mood-line:#CAE3C0;--mood-bold:#245D34}
+  [data-mood="heritage"]{--mood:#97613B;--mood-soft:#FAF0E2;--mood-bg:#FFFBF5;--mood-line:#E9D6B9;--mood-bold:#795035}
+  [data-mood="food"]{--mood:#C75122;--mood-soft:#FFF0E3;--mood-bg:#FFFAF5;--mood-line:#F4D3B6;--mood-bold:#A13D1C}
+  [data-mood="city"]{--mood:#6555BD;--mood-soft:#EEEAFE;--mood-bg:#F8F7FF;--mood-line:#D7D0F1;--mood-bold:#4E408E}
+  [data-mood="sunset"]{--mood:#BB4967;--mood-soft:#FFECF0;--mood-bg:#FFF7F8;--mood-line:#F2C8D2;--mood-bold:#933950}
+  body,.route-choice{--sun:var(--mood);--sun-deep:var(--mood-line);--sea:var(--mood);--sea-deep:var(--mood-line);--surface:var(--mood-soft);--hair:var(--mood-line);--hair-2:var(--mood-line);--txt:#25394A;--txt-2:#596B76;--txt-3:#71808B}
+  html{background:#F3FAFE}body{background:var(--mood-bg);transition:background .35s ease;color:var(--txt);font-size:16px}
+  .wrap{max-width:1060px;padding:28px 26px 54px;min-height:0}.app-header{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:23px 26px 0;gap:16px}.app-brand{display:flex;align-items:center;gap:9px;border:0;background:none;padding:0;color:var(--mood-bold);font-size:19px;font-weight:800;letter-spacing:-.04em}.app-brand svg{width:27px;height:27px}.app-header>span{font-size:12px;color:var(--txt-3);letter-spacing:.1em}
+  .tag{font-size:12px;letter-spacing:.05em}.btn{font-size:15px;padding:12px 21px;border:1px solid var(--mood-line);border-radius:12px;color:var(--mood);background:#FFF}.btn.solid{background:var(--mood);color:#FFF}.btn:hover,.btn.quiet:hover{background:var(--mood-soft);color:var(--mood)}.btn.solid:hover{background:var(--mood-bold);color:white}
+  .band{border-color:var(--mood-line)}.tag.on,.tag.sea{color:var(--mood)}.route-tabs{padding:0;margin:20px 0 24px;gap:12px;background:none;border:0}.route-tabs button{position:relative;border:1px solid var(--mood-line);background:#FFF;border-radius:16px;padding:16px 14px;text-align:left;color:var(--mood-bold);font-size:16px;transition:background .2s ease}.route-tabs button small{font-size:12px;margin-top:5px;color:inherit;opacity:.85}.route-tabs button[aria-pressed="true"]{background:var(--mood);border-color:var(--mood);color:#FFF;box-shadow:0 8px 18px #25394A12}.route-tabs .tab-mood{display:block;font-size:12px;font-weight:600;letter-spacing:.07em;margin-bottom:4px}
+  .route-choice>.band{padding:0;border:0}.route-choice>.band>.stack{gap:20px}.result-intro{border:0;padding:0!important}.result-intro .themetitle{font-size:28px;letter-spacing:-.04em}.result-intro .stack{gap:12px}.prio span{background:#FFF;border:1px solid var(--mood-line);color:var(--mood-bold);font-size:13px}.route-explainer{background:#FFF;border:1px solid var(--mood-line);padding:11px 15px}
+  .course-cover{display:grid;grid-template-columns:1.12fr 1fr;min-height:300px;border-radius:24px;overflow:hidden;background:var(--mood-soft);border:1px solid var(--mood-line)}
+  .cover-photo{margin:0;position:relative;min-height:300px;background:var(--mood-soft)}.cover-photo img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}.cover-photo figcaption{position:absolute;left:18px;bottom:18px;max-width:calc(100% - 36px);background:#FFFFFFED;border-radius:8px;padding:6px 10px;font-size:12px;color:#354B58}.cover-copy{padding:30px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:14px;min-width:0}.cover-copy .mood-label{color:var(--mood);font-size:12px;font-weight:750;letter-spacing:.11em}.cover-copy h2{font-size:36px;line-height:1.28;letter-spacing:-.04em;color:var(--mood-bold)}.cover-copy p{font-size:16px;color:#50616B;line-height:1.7}.cover-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}.cover-meta span{font-size:12px;background:#FFFFFFD9;color:var(--mood-bold);padding:7px 10px;border-radius:8px}.course-cover.no-photo{grid-template-columns:1fr auto;min-height:245px}.course-cover.no-photo .cover-photo{display:none}.course-cover.no-photo .cover-copy{max-width:650px}.cover-number{display:flex;align-items:center;justify-content:center;padding:24px 44px;color:var(--mood);font-size:100px;line-height:1;font-weight:800;opacity:.18;letter-spacing:-.07em}
+  .route-facts{display:flex;gap:20px;flex-wrap:wrap;align-items:center}.route-facts p{font-size:13px;color:var(--txt-2)}.route-facts .hint{margin-left:auto}.route-facts details{font-size:13px;color:var(--txt-2);max-width:100%}.route-facts summary{cursor:pointer}
+  .dayline{display:flex;gap:0;border:1px solid var(--mood-line);border-radius:17px;background:#FFF;padding:17px 10px;overflow-x:auto}.day-step{position:relative;flex:1;min-width:120px;border:0;background:none;text-align:left;color:var(--txt);padding:0 12px}.day-step:not(:last-child){border-right:1px solid var(--mood-line)}.day-step .num{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:var(--mood-soft);color:var(--mood);font-size:12px;font-weight:750;margin-bottom:7px}.day-step .time{color:var(--txt-3);font-size:12px;margin-left:7px}.day-step strong{font-size:13px;line-height:1.5;display:block;font-weight:600}.day-step:hover .num{background:var(--mood);color:#FFF}
+  .section-line{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:8px}.section-line h3{font-size:21px}.section-line span{font-size:12px;color:var(--txt-3)}
+  .course{gap:14px}.lcard{border:1px solid var(--mood-line);border-radius:20px;padding:24px;background:white;box-shadow:0 7px 20px #263D4A05}.lcard.key{border-color:var(--mood-line)}.lcard .top{gap:10px}.step-num{font-size:21px;font-weight:800;color:var(--mood);line-height:1.3;margin-right:4px}.lcard .slotb,.lcard .slotb.m,.lcard .slotb.l,.lcard .slotb.a,.lcard .slotb.s,.lcard .slotb.e{background:var(--mood-soft);color:var(--mood-bold);font-size:12px;letter-spacing:0}.lcard .hh{font-size:13px}.lcard .mt{background:var(--mood-soft);color:var(--mood);font-size:13px}.lcard .mt s{font-size:10px}.tear{border-color:var(--mood-line);margin:16px 0 18px}.stop-photo{float:right;width:215px;height:157px;margin:0 0 18px 24px;border-radius:13px;object-fit:cover;display:block}.stop-symbol{float:right;width:85px;height:85px;border-radius:20px;background:var(--mood-soft);display:grid;place-items:center;font-size:31px;margin:0 0 16px 20px}.lcard .nm{font-size:24px;line-height:1.4;color:#25394A}.lcard .loc{font-size:13px;letter-spacing:0}.lcard .ln{font-size:16px;line-height:1.75}.mapl{border:0;background:var(--mood-soft);color:var(--mood);border-radius:10px;font-size:14px;letter-spacing:0;padding:10px 15px}.mapl:hover{background:var(--mood);color:white}.place-details{clear:both;border-color:var(--mood-line)}.place-details summary{font-size:14px}.conn{background:transparent;border:0;padding:0;color:var(--txt-3);font-size:12px}.conn::before{content:'↓';margin-right:8px;color:var(--mood)}
+  .route-map-details{background:#FFF;border-color:var(--mood-line)}.route-map-details>summary{color:var(--mood);font-size:14px;padding:15px 18px}.routemap,.routemap svg{background:var(--mood-soft)!important}.routemap svg{max-width:520px!important}.route-map-details .btn{background:var(--mood);color:white;border-color:var(--mood)}.photo-credit{font-size:12px;color:var(--txt-3);line-height:1.6;padding:13px 6px}
+  .pt{background:var(--mood-soft);border-color:var(--mood-line)}.pt .badge{background:var(--mood);color:white}.pt .ben{color:var(--mood-bold)}.lcard.finish{background:var(--mood-soft);border-color:var(--mood-line)}.rw b{color:var(--mood)}.stamps i.on{background:var(--mood);border-color:var(--mood)}.stamps i.bonus{background:var(--mood-bold);border-color:var(--mood)}.warn{background:#FFF;border:1px solid var(--mood-line)}.alt{border-color:var(--mood-line)}.alt .p{color:var(--mood)}
+  .start-card{display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;border:1px solid var(--mood-line);border-radius:25px;background:#FFF}.start-copy{padding:36px;display:flex;flex-direction:column;gap:19px;justify-content:center}.start-copy h1{font-size:39px;line-height:1.22;letter-spacing:-.045em}.start-copy .lede{font-size:16px;color:var(--txt-2)}.start-photo{margin:0;position:relative;min-height:340px;background:var(--mood-soft)}.start-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.start-photo figcaption{position:absolute;bottom:18px;left:18px;color:var(--txt);background:#FFFFFFE8;border-radius:9px;padding:7px 11px;font-size:12px}.criteria-preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}.criteria-preview span{background:#FFF;border:1px solid var(--mood-line);border-radius:99px;padding:9px 14px;font-size:14px;color:var(--txt-2)}
+  .screen{background:#FFF;padding:30px;border:1px solid var(--mood-line);border-radius:22px}.screen .mid{padding:23px 0;gap:24px}.screen .foot{border-color:var(--mood-line)}.scan{height:6px;align-items:center;gap:5px}.scan i,.scan i.now{height:6px;border-radius:5px;box-shadow:none}.scan i.done{background:var(--mood-line)}.scan i.now{background:var(--mood)}.qbig{color:var(--mood);font-size:25px}.qtext{font-size:29px;line-height:1.4}.qsub{font-size:15px}.pick,.crit{border-color:var(--mood-line);background:#FFF}.pick:hover,.crit:hover{background:var(--mood-soft);border-color:var(--mood)}.pick[aria-pressed="true"],.crit[aria-pressed="true"]{background:var(--mood-soft);border-color:var(--mood)}.crit[aria-pressed="true"] .t{color:var(--mood)}.crit[aria-pressed="true"] .ord{background:var(--mood)}.pick[aria-pressed="true"]::before{background:var(--mood);border-color:var(--mood)}
+  html[data-embedded="true"] .app-header{display:none}html[data-embedded="true"] .wrap{padding:20px 16px}html[data-embedded="true"] body{background:var(--mood-bg)}
+  @media(max-width:650px){.app-header{padding:20px 20px 0}.app-brand{font-size:17px}.app-header>span{font-size:11px}.wrap{padding:23px 17px 40px}.route-tabs{gap:7px;margin:17px 0 20px}.route-tabs button{font-size:14px;padding:13px 10px;border-radius:13px}.route-tabs .tab-mood{font-size:10px}.route-tabs button small{font-size:11px}.result-intro .themetitle{font-size:24px}.course-cover{grid-template-columns:1fr;border-radius:21px}.cover-photo{min-height:205px}.cover-copy{padding:23px;gap:11px}.cover-copy h2{font-size:30px}.cover-copy p{font-size:15px}.cover-meta span{font-size:12px}.course-cover.no-photo{grid-template-columns:1fr;min-height:0}.cover-number{display:none}.course-cover.no-photo .cover-copy{padding:28px 24px}.route-facts{gap:10px}.route-facts .hint{margin-left:0}.dayline{padding:14px 5px;border-radius:14px}.day-step{min-width:126px;padding:0 10px}.section-line h3{font-size:20px}.lcard{padding:20px 18px;border-radius:18px}.stop-photo{float:none;width:100%;height:190px;margin:0 0 17px}.lcard .nm{font-size:23px}.lcard .ln{font-size:15px}.lcard .mt s{display:none}.stop-symbol{width:64px;height:64px;font-size:25px;margin-left:14px}.place-details>summary{font-size:13px}.start-card{grid-template-columns:1fr}.start-copy{padding:27px 24px;gap:16px}.start-copy h1{font-size:33px}.start-photo{min-height:200px}.criteria-preview{gap:8px;margin-top:18px}.criteria-preview span{font-size:13px;padding:7px 11px}.screen{padding:22px 18px}.qtext{font-size:24px}.qbig{font-size:22px}.qhead{gap:14px}.screen .mid{padding:20px 0}.pick{font-size:15px}.pick small{font-size:13px}}
+  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="app-header"><button class="app-brand" id="appHome" aria-label="처음으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zM9 3v16M15 5v16"/></svg>나에게 맞는 하루</button><span>MY DAY · YOUR WAY</span></header>
 <div class="aura"></div><div class="aura2"></div><div class="aura3"></div><div class="vig"></div><div class="grain"></div>
 <div class="wrap"><div id="app"></div></div>
 
 <script>
+/*TRAVEL_PARAMS*/
 (function(){
   "use strict";
   /* ============ 7가지 기준 ============
@@ -798,6 +850,47 @@
   };
   SPOT.forEach(function(sp){ if(IMG_MAP[sp.n]) sp.img = IMG_MAP[sp.n]; });
 
+  /* Presentation only: moods never change destination scores or stop order. */
+  var IMAGE_ASSETS = {};
+  var MOODS = {
+    ocean:{name:"바다를 따라",en:"COASTAL DAY",line:"파도와 바람 사이, 마음까지 시원해지는 하루.",accent:"#087EAA",soft:"#E6F6FC",lineColor:"#BDDFEE",ink:"#075A7A",icon:"🌊",words:/해변|해안|바다|해수욕|포구|등대|항구|주상절리|용머리|섭지코지|광안|해운대|용두암|용연|연화도|외돌개/g},
+    forest:{name:"초록에 머물다",en:"GREEN ESCAPE",line:"천천히 걷고 깊이 숨 쉬는, 자연의 속도로.",accent:"#287A40",soft:"#EAF5E6",lineColor:"#CAE3C0",ink:"#245D34",icon:"🌿",words:/숲|림|수목|정원|차밭|녹차|대숲|죽녹원|오름|계곡|폭포|산책|습지|순천만|한라산|설악|소백산|수월봉/g},
+    heritage:{name:"이야기를 걷다",en:"HERITAGE WALK",line:"오래된 골목과 풍경 속, 이야기를 만나는 길.",accent:"#97613B",soft:"#FAF0E2",lineColor:"#E9D6B9",ink:"#795035",icon:"🏛️",words:/궁|사찰|성곽|고분|박물관|한옥|유적|불국사|첨성대|석굴암|하회|민속|삼성혈|관덕정|공산성|전등사|구인사|산성|낙화암|근대/g},
+    food:{name:"맛으로 채운 하루",en:"LOCAL FLAVOURS",line:"시장 한 바퀴, 맛있는 한 입. 동네의 매력을 만나요.",accent:"#C75122",soft:"#FFF0E3",lineColor:"#F4D3B6",ink:"#A13D1C",icon:"🍊",words:/시장|맛집|밥상|먹거리|음식|국수|회센터|횟집|먹자|야시장|막국수|한정식/g},
+    city:{name:"가볍게, 도시 산책",en:"CITY STROLL",line:"골목마다 다른 장면, 나만의 취향을 발견하는 하루.",accent:"#6555BD",soft:"#EEEAFE",lineColor:"#D7D0F1",ink:"#4E408E",icon:"☕",words:/성수|서촌|카페|거리|원도심|골목|타워|벽화|문화|예술|갤러리|헤이리|탑동|행리단/g},
+    sunset:{name:"노을을 담는 시간",en:"GOLDEN HOUR",line:"하루의 끝이 가장 아름다운 곳으로.",accent:"#BB4967",soft:"#FFECF0",lineColor:"#F2C8D2",ink:"#933950",icon:"🌅",words:/노을|일몰|낙조|야경|밤바다|선셋|꽃지|낙산/g}
+  };
+  function moodScores(sp){
+    var scores = {}, name = sp.n || "", desc = sp.one || "";
+    Object.keys(MOODS).forEach(function(k){
+      scores[k] = (name.match(MOODS[k].words) || []).length * 4 + Math.min(2, (desc.match(MOODS[k].words) || []).length);
+    });
+    return scores;
+  }
+  function courseMood(course){
+    var sums = {ocean:0,forest:0,heritage:0,food:0,city:0,sunset:0};
+    course.forEach(function(lg){ var s = moodScores(lg.it.sp); Object.keys(s).forEach(function(k){ sums[k] += s[k]; }); });
+    if(state.prio[0] === "eat") sums.food += 5;
+    if(state.prio[0] === "story") sums.heritage += 3;
+    var order = Object.keys(sums).sort(function(a,b){ return sums[b] - sums[a]; });
+    return sums[order[0]] > 0 ? order[0] : "city";
+  }
+  function imageHref(src){ return src; }
+  function coursePhoto(course, mood){
+    return course.filter(function(lg){return !!lg.it.sp.img;}).sort(function(a,b){return moodScores(b.it.sp)[mood] - moodScores(a.it.sp)[mood];})[0];
+  }
+  function applyMood(key){ document.body.dataset.mood = MOODS[key] ? key : "ocean"; }
+  function coverHTML(course, RG, idx){
+    var key = courseMood(course), M = MOODS[key], photo = coursePhoto(course,key), sp = photo && photo.it.sp;
+    return '<div class="course-cover' + (sp ? '' : ' no-photo') + '">' +
+      (sp ? '<figure class="cover-photo"><img src="' + esc(imageHref(sp.img)) + '" alt="' + esc(sp.n) + '" onerror="this.closest(\'.course-cover\').classList.add(\'no-photo\');this.parentNode.hidden=true"><figcaption>' + esc(sp.n) + '</figcaption></figure>' : '') +
+      '<div class="cover-copy"><span class="mood-label">' + M.en + ' · DAY TRIP</span><h2>' + esc(RG.n) + '<br>' + M.name + '</h2><p>' + M.line + '</p><div class="cover-meta"><span>' + course.length + '곳의 여행 장면</span><span>' + esc(RG.s) + '</span></div></div>' +
+      (sp ? '' : '<span class="cover-number" aria-hidden="true">0' + (idx + 1) + '</span>') + '</div>';
+  }
+  function daylineHTML(course, idx){
+    return '<nav class="dayline" aria-label="하루 일정 바로가기">' + course.map(function(lg,i){return '<button class="day-step" data-stop="stop-' + idx + '-' + i + '"><span class="num">' + (i+1) + '</span><span class="time">' + esc(lg.slot.h) + '</span><strong>' + esc(lg.it.sp.n) + '</strong></button>';}).join('') + '</nav>';
+  }
+
   /* ============ 입력 단계 정의 ============ */
 
   var AREAS = [
@@ -871,7 +964,7 @@
 
   /* 자아찾기 앱에서 ?prio=see,story,shot&type=IF 형태로 넘어온 경우 그 값을 받는다 */
   (function importFromSelfMap(){
-    var qp = new URLSearchParams(location.search);
+    var qp = new URLSearchParams(window.__TRAVEL_SEARCH__ || location.search);
     var raw = qp.get("prio");
     if(!raw) return;
     var valid = raw.split(",").map(function(x){ return x.trim(); })
@@ -1112,6 +1205,8 @@
 
   function render(){
     window.scrollTo(0, 0);
+    document.body.dataset.view = state.step < 0 ? "intro" : state.step >= STEPS.length ? "result" : "questions";
+    if(state.step < STEPS.length) applyMood("ocean");
     if(state.step === -1) return renderIntro();
     if(state.step >= STEPS.length) return renderResult();
     var k = STEPS[state.step];
@@ -1120,49 +1215,25 @@
   }
 
   function renderIntro(){
-    var h = '<div class="band"><div class="stack">'
-      + '<span class="tag on">7 CRITERIA · 전국 ' + SPOT.length + '개 스팟 · 제주 ' + jejuCount() + '곳</span>'
-      + '<h1 class="hero">나에게 맞는<br><span class="lit">하루</span>를 짭니다.</h1>'
-      + '<p class="lede">여행앱은 장소를 먼저 보여주고 고르라고 합니다. '
-      + '이건 반대입니다. <b>사람을 먼저 이해하고</b> 그 사람에게 맞는 장소를 찾습니다.</p>'
-      + '<p class="kicker">전국 스팟을 <em>7가지 기준</em>으로 점수화했습니다.<br>'
-      + '당신이 중요하게 보는 것 <em>1~3개</em>만 고르면,<br>오전부터 저녁까지 하루가 나옵니다.</p>'
-      + (state.fromSelfMap
-          ? '<p class="hint">🧭 자아찾기 결과 <b>' + esc(state.selfType || "") + '</b> 기준으로 우선순위를 채웠습니다 — <b>'
-            + state.prio.map(function(k){ return CRIT[CI[k]].e + " " + CRIT[CI[k]].t; }).join(", ")
-            + '</b>. <b>제주</b> 안에서 지역까지 자동으로 골라서 바로 코스를 보여드릴게요.</p>'
-          : '')
-      + '</div></div>'
-
-      + '<div class="band"><div class="stack">'
-      + '<span class="tag">SEVEN CRITERIA</span><div class="steps">';
-    CRIT.forEach(function(c){
-      h += '<div class="step"><span class="n">' + c.e + '</span><span class="b"><b>' + esc(c.ax)
-        + '</b> — ' + esc(c.d) + '<br><span style="color:var(--txt-3)">“' + esc(c.ask) + '”</span></span></div>';
-    });
-    h += '</div></div></div>'
-
-      + '<div class="band"><div class="btnrow">'
-      + '<button class="btn solid" id="go">' + (state.fromSelfMap ? "내 여행 코스 바로 보기" : "시작하기") + '</button>'
-      + (resumable ? '<button class="btn quiet" id="resume">이어서 하기</button>' : '')
-      + '</div>'
-      + (state.fromSelfMap ? '<p class="hint" style="margin-top:10px"><button class="skip" id="manual">아니면 지역·동행 직접 정하기 →</button></p>' : '')
-      + '<p class="foot-note" style="margin-top:18px">답변은 이 브라우저에만 저장됩니다. 서버로 전송되지 않습니다.</p></div>';
-
+    var h = '<section class="start-card"><div class="start-copy">' +
+      '<span class="tag on">MY DAY · 취향으로 만드는 여행</span>' +
+      '<h1>오늘은 어디에서<br><span style="color:var(--mood)">나답게 놀까요?</span></h1>' +
+      '<p class="lede">가고 싶은 지역과 좋아하는 여행 방식을 고르면, 오전부터 저녁까지 나에게 맞는 코스를 짜 드려요.</p>' +
+      '<div class="btnrow"><button class="btn solid" id="go">' + (state.fromSelfMap ? '내 취향으로 코스 보기' : '나의 하루 코스 만들기') + '</button>' +
+      (resumable ? '<button class="btn quiet" id="resume">이어서 만들기</button>' : '') + '</div>' +
+      '<p class="foot-note">전국 ' + SPOT.length + '개 여행지 · 7가지 취향 기준</p>' +
+      (state.fromSelfMap ? '<button class="skip" id="manual">지역·동행부터 직접 고르기</button>' : '') +
+      '</div><figure class="start-photo"><img src="' + esc(imageHref('img/JJW_03.jpg')) + '" alt="제주 금능·협재 해변" fetchpriority="high"><figcaption>다음 여행의 한 장면 · 제주 금능·협재 해변</figcaption></figure></section>' +
+      '<div class="criteria-preview" aria-label="여행 취향">' + CRIT.map(function(c){return '<span>' + c.e + ' ' + esc(c.t) + '</span>';}).join('') + '</div>' +
+      '<p class="foot-note" style="margin-top:22px">답변은 이 브라우저에만 저장됩니다. 추천 장소의 영업시간과 예약 여부는 방문 전 확인해 주세요.</p>' +
+      '<details class="photo-credit"><summary>사진 출처</summary>' + esc(IMG_CREDIT['img/JJW_03.jpg'] || '') + ' · 기존 여행 사진</details>';
     app.innerHTML = h;
     document.getElementById("go").onclick = function(){
-      if(state.fromSelfMap){
-        state.step = STEPS.length;
-        save(); render();
-        return;
-      }
-      state = { step:0, area:null, prio:[], who:null, walk:null, move:null };
-      save(); render();
+      if(state.fromSelfMap){state.step=STEPS.length;save();render();return;}
+      state = {step:0,area:null,prio:[],who:null,walk:null,move:null}; save();render();
     };
-    var m = document.getElementById("manual");
-    if(m) m.onclick = function(){ state.step = 0; save(); render(); };
-    var r = document.getElementById("resume");
-    if(r) r.onclick = function(){ state.step = 0; render(); };
+    var m=document.getElementById("manual");if(m)m.onclick=function(){state.step=0;save();render();};
+    var r=document.getElementById("resume");if(r)r.onclick=function(){state.step=0;render();};
   }
 
   function renderPick(i){
@@ -1248,7 +1319,7 @@
     var h = '<div class="band"><div class="stack">'
       + '<span class="tag on">CAMPAIGN · 지금 이 지역 지원사업</span>';
     if(!list.length){
-      h += '<div class="campnone">현재 확인된 기간 한정 지원사업이 없습니다. 주 1회 자동으로 다시 확인합니다.</div>';
+      h += '<div class="campnone">현재 등록된 기간 한정 지원사업이 없습니다. 방문 전 최신 공고를 확인해 주세요.</div>';
     } else {
       list.forEach(function(cm){
         h += '<div class="camp"><div class="h">'
@@ -1344,76 +1415,49 @@
   ==================================================== */
   var SLOT_ICON = { m:"☀️", l:"🍚", a:"📍", s:"🌇", e:"🌙" };
 
+  function svgWordLines(text, limit){
+    var words = String(text).split(/\s+/), lines = [], line = "";
+    words.forEach(function(word){ if(line && (line + " " + word).length > limit){lines.push(line);line=word;}else line += (line ? " " : "") + word; });
+    if(line) lines.push(line);
+    return lines;
+  }
   function routeMapSVG(course, idx, RG, rankLabel){
     if(!course.length) return "";
-    var W = 340, R = 46, PADX = 74, GAPY = 172, HEAD = 58, FOOT = 46;
-    var bodyH = (course.length - 1) * GAPY + R + 60;
-    var H = HEAD + bodyH + FOOT;
-    var pts = course.map(function(lg, i){
-      return { x: i % 2 === 0 ? PADX : (W - PADX), y: HEAD + 26 + i * GAPY, lg: lg };
-    });
-
-    var defs = "", circles = "", labels = "", path = "";
-
-    // 점선 경로 — 점들을 부드러운 곡선으로 연결
-    if(pts.length > 1){
-      var d = "M" + pts[0].x + "," + pts[0].y;
-      for(var i = 1; i < pts.length; i++){
-        var p0 = pts[i - 1], p1 = pts[i];
-        var midY = (p0.y + p1.y) / 2;
-        d += " C" + p0.x + "," + midY + " " + p1.x + "," + midY + " " + p1.x + "," + p1.y;
+    var key = courseMood(course), M = MOODS[key], photo = coursePhoto(course,key), W = 640;
+    var heroH = photo ? 220 : 0, headH = heroH + 172;
+    var rows = course.map(function(lg){return {lg:lg,lines:svgWordLines(lg.it.sp.n,18)};});
+    var H = headH + rows.reduce(function(n,r){return n + Math.max(146, r.lines.length * 27 + 78);},0) + 92;
+    var svg = '<svg id="routemapSvg' + idx + '" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" style="width:100%;max-width:640px;display:block;margin:auto" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard,Malgun Gothic,Arial,sans-serif">';
+    svg += '<defs><clipPath id="coverClip' + idx + '"><rect width="640" height="' + heroH + '" rx="20"/></clipPath></defs><rect width="640" height="' + H + '" rx="20" fill="' + M.soft + '"/>';
+    if(photo) svg += '<image href="' + esc(imageHref(photo.it.sp.img)) + '" width="640" height="' + heroH + '" preserveAspectRatio="xMidYMid slice" clip-path="url(#coverClip' + idx + ')"/>';
+    svg += '<text x="32" y="' + (heroH + 38) + '" font-size="13" letter-spacing="2" font-weight="700" fill="' + M.accent + '">' + M.en + ' · MY DAY</text>';
+    svg += '<text x="32" y="' + (heroH + 83) + '" font-size="34" font-weight="800" fill="' + M.ink + '">' + esc(RG.n) + '</text>';
+    svg += '<text x="32" y="' + (heroH + 116) + '" font-size="19" fill="' + M.ink + '">' + M.name + ' · ' + course.length + '곳의 여행 장면</text>';
+    svg += '<text x="32" y="' + (heroH + 145) + '" font-size="13" fill="#667783">예시 일정 · 실제 이동·영업시간은 방문 전 확인해 주세요</text>';
+    var y = headH;
+    rows.forEach(function(row,i){
+      var sp = row.lg.it.sp, h = Math.max(146,row.lines.length * 27 + 78), hasPhoto = !!sp.img, textX = hasPhoto ? 194 : 98;
+      if(i < rows.length - 1) svg += '<path d="M40 ' + (y+35) + ' V' + (y+h+35) + '" stroke="' + M.lineColor + '" stroke-width="3" stroke-dasharray="4 6"/>';
+      svg += '<rect x="72" y="' + y + '" width="540" height="' + (h-14) + '" rx="16" fill="#FFFFFF"/>';
+      svg += '<circle cx="40" cy="' + (y+34) + '" r="17" fill="' + M.accent + '"/><text x="40" y="' + (y+40) + '" text-anchor="middle" font-size="15" font-weight="700" fill="#FFFFFF">' + (i+1) + '</text>';
+      if(hasPhoto){
+        var clip='thumb'+idx+'_'+i;
+        svg += '<defs><clipPath id="' + clip + '"><rect x="90" y="' + (y+19) + '" width="86" height="94" rx="11"/></clipPath></defs><image href="' + esc(imageHref(sp.img)) + '" x="90" y="' + (y+19) + '" width="86" height="94" preserveAspectRatio="xMidYMid slice" clip-path="url(#' + clip + ')"/>';
       }
-      path = '<path d="' + d + '" fill="none" stroke="#B0602F" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>';
-    }
-
-    pts.forEach(function(p, i){
-      var sp = p.lg.it.sp, cid = "clip" + idx + "_" + i;
-      var img = sp.img;
-      if(img){
-        defs += '<clipPath id="' + cid + '"><circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '"/></clipPath>';
-        circles += '<image href="' + esc(img) + '" x="' + (p.x - (R - 4)) + '" y="' + (p.y - (R - 4)) + '" '
-          + 'width="' + (R - 4) * 2 + '" height="' + (R - 4) * 2 + '" preserveAspectRatio="xMidYMid slice" clip-path="url(#' + cid + ')"/>';
-      } else {
-        circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (R - 4) + '" fill="#1D1428"/>'
-          + '<text x="' + p.x + '" y="' + (p.y + 9) + '" font-size="30" text-anchor="middle">' + (SLOT_ICON[p.lg.slot.k] || "📍") + '</text>';
-      }
-      circles += '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + R + '" fill="none" stroke="' + (i === 0 ? "#FF9F5A" : "#4F3B58") + '" stroke-width="3"/>';
-      circles += '<circle cx="' + p.x + '" cy="' + (p.y - R + 2) + '" r="12" fill="#FF9F5A"/>'
-        + '<text x="' + p.x + '" y="' + (p.y - R + 6) + '" font-size="10" font-weight="700" text-anchor="middle" fill="#2A1206">' + (i + 1) + '</text>';
-
-      var name = sp.n.length > 13 ? sp.n.slice(0, 12) + "…" : sp.n;
-      var lx = p.x, anchor = "middle", ly = p.y + R + 24;
-      labels += '<text x="' + lx + '" y="' + ly + '" font-size="14" font-weight="700" fill="#FBF2E6" text-anchor="' + anchor + '">' + esc(name) + '</text>'
-        + '<text x="' + lx + '" y="' + (ly + 17) + '" font-size="10" fill="#8D7C93" text-anchor="' + anchor + '">' + esc(p.lg.slot.t) + ' ' + esc(p.lg.slot.h) + '</text>';
+      svg += '<text x="' + textX + '" y="' + (y+29) + '" font-size="13" font-weight="600" fill="' + M.accent + '">' + esc(row.lg.slot.t) + ' · ' + esc(row.lg.slot.h) + '</text>';
+      row.lines.forEach(function(line,n){svg += '<text x="' + textX + '" y="' + (y+61+n*27) + '" font-size="21" font-weight="700" fill="#25394A">' + esc(line) + '</text>';});
+      svg += '<text x="' + textX + '" y="' + (y+86+(row.lines.length-1)*27) + '" font-size="13" fill="#73808A">' + esc(sp.c) + '</text>';
+      y += h;
     });
-
-    var creditLines = [];
-    course.forEach(function(lg){
-      var sp = lg.it.sp;
-      if(sp.img && IMG_CREDIT[sp.img]) creditLines.push(esc(sp.n) + " — " + esc(IMG_CREDIT[sp.img]));
-    });
-    var hasAnyImg = course.some(function(lg){ return lg.it.sp.img; });
-
-    var bg = '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#150E1E"/>';
-    var header = '<text x="' + (W / 2) + '" y="24" font-size="12" font-weight="700" fill="#FF9F5A" text-anchor="middle" letter-spacing="1">' + esc((rankLabel || "").split(" ")[0]) + '</text>'
-      + '<text x="' + (W / 2) + '" y="40" font-size="11" fill="#8D7C93" text-anchor="middle">' + esc(RG ? RG.n : "") + '</text>';
-    var footer = '<text x="' + (W / 2) + '" y="' + (H - 16) + '" font-size="9" fill="#5A4C63" text-anchor="middle" letter-spacing="1">' + esc(SITE || "MY DAY") + '</text>';
-
-    return '<div class="routemap" id="routemap' + idx + '"><svg id="routemapSvg' + idx + '" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" style="width:100%;max-width:' + W + 'px;display:block;margin:0 auto;background:#150E1E;border-radius:var(--r-lg)" xmlns="http://www.w3.org/2000/svg">'
-      + bg + '<defs>' + defs + '</defs>'
-      + header + path + circles + labels + footer
-      + '</svg>'
-      + (hasAnyImg ? '' : '<p class="hint" style="text-align:center;margin-top:6px">사진은 순차적으로 채워질 예정입니다 — 지금은 시간대 아이콘으로 표시됩니다</p>')
-      + (creditLines.length
-          ? '<p class="hint" style="margin-top:10px;padding:0 14px;line-height:1.7">사진 출처 — ' + creditLines.join(' · ') + '</p>'
-          : '')
-      + '<div class="btnrow" style="justify-content:center;margin-top:10px">'
-      + '<button class="btn quiet saveRouteBtn" data-idx="' + idx + '">이 코스 카드 저장</button>'
-      + '</div>'
-      + '</div>';
+    svg += '<text x="32" y="' + (H-48) + '" font-size="16" font-weight="700" fill="' + M.ink + '">나에게 맞는 하루</text><text x="32" y="' + (H-23) + '" font-size="12" fill="#6C7E89">취향을 따라, 나의 속도로.</text></svg>';
+    var creditLines = course.filter(function(lg){return lg.it.sp.img;}).map(function(lg){return esc(lg.it.sp.n) + ' — ' + esc(IMG_CREDIT[lg.it.sp.img] || '기존 여행 사진');});
+    return '<details class="route-map-details"><summary>한 장으로 보는 나의 코스</summary><div class="routemap" id="routemap' + idx + '">' + svg +
+      (creditLines.length ? '<p class="photo-credit">사진 출처 · ' + creditLines.join(' / ') + '</p>' : '') +
+      '<div class="btnrow" style="justify-content:center"><button class="btn saveRouteBtn" data-idx="' + idx + '">이 코스 카드 저장</button></div></div></details>';
   }
 
   function courseBlockHTML(course, RG, rankLabel, prioSet, regionCode, showLocNote, idx){
+    var courseIdx = idx, mood = courseMood(course), M = MOODS[mood];
     var ptUsed = {}, liveCount = 0;
     course.forEach(function(lg){
       var t = partnerFor(lg.it.sp, lg.slot.k, ptUsed);
@@ -1421,12 +1465,12 @@
     });
 
     var h = '<div class="band"><div class="stack">'
-      + '<span class="tag on">' + esc(rankLabel) + ' · ' + esc(RG.n) + '</span>'
-      + '<p class="regionline"><span style="color:var(--txt-3)">' + esc(RG.s) + '</span>'
-      + '<br>' + esc(RG.mv) + '</p>'
-      + '<p class="hint">🕒 ' + durationLabel(course) + '</p>'
+      + coverHTML(course, RG, idx)
+      + daylineHTML(course, idx)
+      + '<div class="route-facts"><details><summary>이동 안내 · ' + esc(RG.s) + '</summary><p>' + esc(RG.mv) + '</p></details><p class="hint">' + durationLabel(course) + '</p><button class="btn saveRouteBtn" data-idx="' + idx + '">코스 카드 저장</button></div>'
       + (showLocNote ? '<p class="hint" id="locNote">📍 위치 확인 중 — 브라우저에 위치 권한을 허용하면 현재 위치에서 첫 장소까지 대략 거리를 보여드립니다.</p>' : '')
       + routeMapSVG(course, idx, RG, rankLabel)
+      + '<div class="section-line"><h3>오늘의 여행 순서</h3><span>' + esc(rankLabel) + '</span></div>'
       + '<div class="course">';
 
     course.forEach(function(lg, idx){
@@ -1437,21 +1481,23 @@
               + esc(lg.move.city) + roJosa(lg.move.city)
             : '같은 동네 · 차로 5~15분')
         + '</div>';
-      h += '<div class="lcard' + (idx === 0 ? " key" : "") + '">'
+      h += '<div class="lcard' + (idx === 0 ? " key" : "") + '" id="stop-' + courseIdx + '-' + idx + '">'
         + '<div class="top">'
+        + '<span class="step-num">' + String(idx + 1).padStart(2,"0") + '</span>'
         + '<span class="slotb ' + lg.slot.k + '">' + lg.slot.t + '</span>'
         + '<span class="hh">' + lg.slot.h + '</span>'
         + '<span class="mt"><s>MATCH</s>' + pct(lg.it.v) + '</span>'
         + '</div>'
         + '<div class="tear"></div>'
+        + (sp.img ? '<img class="stop-photo" src="' + esc(imageHref(sp.img)) + '" alt="' + esc(sp.n) + '" loading="lazy" onerror="this.hidden=true">' : '<div class="stop-symbol" aria-hidden="true">' + (lg.slot.k === "l" || lg.slot.k === "e" ? "🍽️" : M.icon) + '</div>')
         + '<div class="nm">' + esc(sp.n) + '</div>'
         + '<div class="loc">' + esc(sp.c) + '</div>'
         + '<p class="ln">' + esc(sp.one) + '</p>'
-        + '<p class="st"><b>여기 이런 이야기가</b> — ' + esc(sp.story) + '</p>'
         + '<a class="mapl" href="' + mapURL(sp.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
+        + '<details class="place-details"><summary>이 장소가 나에게 맞는 이유</summary><p class="st"><b>여기 이런 이야기가</b> — ' + esc(sp.story) + '</p>'
         + (lg.alt ? '<p class="altl">이 시간대 대안 — <b>' + esc(lg.alt) + '</b></p>' : '')
         + (lg.pt ? ptHTML(lg.pt) : '')
-        + '</div>';
+        + '</details></div>';
     });
 
     if(course.length && regionCode) h += foodHTML(regionCode);
@@ -1515,6 +1561,7 @@
     var best = top3[0];
     var course = buildCourse(list, best.r);
     var RG = REGION[best.r];
+    applyMood(courseMood(course));
     var prioSet = {}; state.prio.forEach(function(k){ prioSet[k] = 1; });
 
     var theme = state.prio.map(function(k){ return THEME_WORD[k]; }).join(", ") + " 오는 하루";
@@ -1522,9 +1569,9 @@
     var walkT = (WALKS.filter(function(o){ return o.v === state.walk; })[0] || {}).t || "";
     var moveT = (MOVES.filter(function(o){ return o.v === state.move; })[0] || {}).t || "";
 
-    var h = '<div class="band"><div class="stack">'
-      + '<span class="tag on">TODAY’S THEME</span>'
-      + '<h1 class="themetitle">〈<span class="lit">' + esc(theme) + '</span>〉</h1>'
+    var h = '<div class="band result-intro"><div class="stack">'
+      + '<span class="tag on">YOUR DAY, YOUR COLOUR</span>'
+      + '<h1 class="themetitle">취향을 따라 완성한 오늘의 여행</h1>'
       + '<div class="prio">';
     CRIT.forEach(function(c){
       var on = prioSet[c.k];
@@ -1536,16 +1583,15 @@
             : [whoT, walkT, moveT].filter(Boolean).map(esc).join(' · ')
               + ' 기준으로 전국 ' + SPOT.length + '개 스팟을 7기준 점수로 매칭한 코스 3가지입니다.')
       + '</p>'
-      + '<p class="hint"><b>서로 다른 지역의 대안입니다 — 이 중 하나만 골라 하루를 보내면 됩니다.</b> '
+      + '<details class="route-explainer"><summary>코스는 어떻게 이용하나요?</summary><p class="hint"><b>서로 다른 지역의 대안입니다 — 이 중 하나만 골라 하루를 보내면 됩니다.</b> '
       + '한 코스 안의 장소끼리는 가깝지만, 순위가 다른 코스끼리는(예: 서귀포 코스 ↔ 제주시 코스) 차로 40분 이상 떨어져 있을 수 있어 같은 날 오가는 걸 권하지 않습니다.</p>'
-      + '</div></div>'
-
-      + campaignBlock(best.r);
+      + '</details></div></div>';
 
     var RANK_LABEL = ["1순위", "2순위", "3순위"];
+    h += '<div class="route-tabs" role="group" aria-label="추천 코스 선택">' + top3.map(function(r, ri){ var mood=courseMood(buildCourse(list,r.r)); return '<button data-route-tab="' + ri + '" data-mood="' + mood + '" aria-pressed="' + (ri === 0) + '"><span class="tab-mood">' + MOODS[mood].name + '</span>' + esc(REGION[r.r].n) + '<small>' + RANK_LABEL[ri] + ' 추천 코스</small></button>'; }).join('') + '</div>';
     top3.forEach(function(r, ri){
       var c = ri === 0 ? course : buildCourse(list, r.r);
-      h += courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r, ri === 0, ri);
+      h += '<div class="route-choice" data-mood="' + courseMood(c) + '" data-route-choice="' + ri + '"' + (ri ? ' hidden' : '') + '>' + courseBlockHTML(c, REGION[r.r], RANK_LABEL[ri] + ' · 매칭 ' + pct(r.v), prioSet, r.r, ri === 0, ri) + '</div>';
     });
 
     if(others.length){
@@ -1560,6 +1606,7 @@
     }
 
     var lowest = CK.filter(function(k){ return !prioSet[k]; });
+    h += campaignBlock(best.r);
     h += '<div class="band"><div class="stack">'
       + '<span class="tag sea">TRADE-OFF</span>'
       + '<div class="warn"><b>이번 코스가 포기한 것</b><br>'
@@ -1583,6 +1630,15 @@
 
     (function(){
       var note = document.getElementById("locNote");
+      Array.prototype.forEach.call(app.querySelectorAll('[data-route-tab]'), function(button){
+        button.onclick = function(){
+          var selected = button.getAttribute('data-route-tab');
+          applyMood(button.getAttribute('data-mood'));
+          app.querySelectorAll('[data-route-tab]').forEach(function(b){ b.setAttribute('aria-pressed', String(b === button)); });
+          app.querySelectorAll('[data-route-choice]').forEach(function(panel){ panel.hidden = panel.getAttribute('data-route-choice') !== selected; });
+        };
+      });
+      app.querySelectorAll('[data-stop]').forEach(function(button){ button.onclick = function(){ var target = document.getElementById(button.getAttribute('data-stop')); if(target) target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',block:'start'}); }; });
       if(!note || !navigator.geolocation || RG.lat == null) { if(note) note.remove(); return; }
       navigator.geolocation.getCurrentPosition(function(pos){
         var km = haversineKm(pos.coords.latitude, pos.coords.longitude, RG.lat, RG.lng);
@@ -1651,7 +1707,7 @@
           var href = im.getAttribute("href");
           if(!href) return;
           try{
-            var dataUri = await fileToDataURI(new URL(href, location.href).href);
+            var dataUri = href.indexOf("data:") === 0 ? href : await fileToDataURI(new URL(href, document.baseURI).href);
             im.setAttribute("href", dataUri);
           }catch(e){ im.remove(); }
         }));
@@ -1696,6 +1752,10 @@
     });
   }
 
+  document.documentElement.dataset.embedded = window.parent !== window ? "true" : "false";
+  var homeButton = document.getElementById("appHome");
+  if(homeButton) homeButton.onclick = function(){ resumable = !!(state.prio && state.prio.length); state.step = -1; save(); render(); };
+
   if(document.fonts && document.fonts.ready){
     document.fonts.ready.then(function(){ if(state.step >= STEPS.length) render(); });
   }
@@ -1703,3 +1763,5 @@
   render();
 })();
 </script>
+</body>
+</html>
