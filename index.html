@@ -1232,7 +1232,6 @@
       '<div class="btnrow"><button class="btn solid" id="go">' + (state.fromSelfMap ? '내 취향으로 코스 보기' : '나의 하루 코스 만들기') + '</button>' +
       (resumable ? '<button class="btn quiet" id="resume">이어서 만들기</button>' : '') + '</div>' +
       '<p class="foot-note">전국 ' + SPOT.length + '개 여행지 · 7가지 취향 기준</p>' +
-      (state.fromSelfMap ? '<button class="skip" id="manual">지역·동행부터 직접 고르기</button>' : '') +
       '</div><figure class="start-photo"><img src="' + esc(imageHref('img/JJW_03.jpg')) + '" alt="제주 금능·협재 해변" fetchpriority="high"><figcaption>다음 여행의 한 장면 · 제주 금능·협재 해변</figcaption></figure></section>' +
       '<div class="criteria-preview" aria-label="여행 취향">' + CRIT.map(function(c){return '<span>' + c.e + ' ' + esc(c.t) + '</span>';}).join('') + '</div>' +
       '<p class="foot-note" style="margin-top:22px">답변은 이 브라우저에만 저장됩니다. 추천 장소의 영업시간과 예약 여부는 방문 전 확인해 주세요.</p>' +
@@ -1242,7 +1241,6 @@
       if(state.fromSelfMap){state.step=STEPS.length;save();render();return;}
       state = {step:0,area:null,prio:[],who:null,walk:null,move:null}; save();render();
     };
-    var m=document.getElementById("manual");if(m)m.onclick=function(){state.step=0;save();render();};
     var r=document.getElementById("resume");if(r)r.onclick=function(){state.step=0;render();};
   }
 
@@ -1527,11 +1525,12 @@
         + '<div class="nm">' + esc(sp.n) + '</div>'
         + '<div class="loc">' + esc(sp.c) + '</div>'
         + '<p class="ln">' + esc(sp.one) + '</p>'
+        + (lg.pt && lg.pt.st === "live" ? ptHTML(lg.pt) : '')
         + '<a class="mapl" href="' + mapURL(sp.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
         + spotFoodHTML(sp.n)
         + '<details class="place-details"><summary>이 장소가 나에게 맞는 이유</summary><p class="st"><b>여기 이런 이야기가</b> — ' + esc(sp.story) + '</p>'
         + (lg.alt ? '<p class="altl">이 시간대 대안 — <b>' + esc(lg.alt) + '</b></p>' : '')
-        + (lg.pt ? ptHTML(lg.pt) : '')
+        + (lg.pt && lg.pt.st !== "live" ? ptHTML(lg.pt) : '')
         + '</details></div>';
     });
 
@@ -1657,11 +1656,14 @@
       + '<div class="band"><div class="stack">'
       + '<span class="tag">SAVE</span>'
       + '<p class="hint">코스별 카드는 위 각 코스의 지도 아래 “이 코스 카드 저장” 버튼으로 저장합니다.</p>'
-      + '<div class="btnrow">'
-      + '<button class="btn quiet" id="back">기준 바꾸기</button>'
-      + (state.fromSelfMap ? '<button class="btn quiet" id="manual2">지역·동행 직접 정하기</button>' : '')
-      + '<button class="btn quiet" id="again">처음부터</button>'
-      + '</div>'
+      /* selfmap에서 iframe으로 열렸을 때는 이 버튼들이 마이데이 자체 5단계 마법사를
+         iframe 한가운데 띄워서 "처음부터"가 두 개(부모 앱 것 + 이것) 보이는 등
+         혼란을 준다. 그 경로에서는 아예 숨기고, 다시 시작은 selfmap 쪽 버튼에 맡긴다. */
+      + (state.fromSelfMap ? '' :
+        '<div class="btnrow">'
+        + '<button class="btn quiet" id="back">기준 바꾸기</button>'
+        + '<button class="btn quiet" id="again">처음부터</button>'
+        + '</div>')
       + '<p class="foot-note">추천은 7기준 점수 매칭 결과입니다. 영업시간·휴무일·예약·요금은 반드시 직접 확인하세요. 지도 링크는 네이버 지도로 연결됩니다.</p>'
       + '</div></div>';
 
@@ -1706,10 +1708,10 @@
     Array.prototype.forEach.call(app.querySelectorAll(".saveRouteBtn"), function(b){
       b.onclick = function(){ saveRouteCard(+b.getAttribute("data-idx")); };
     });
-    document.getElementById("back").onclick = function(){ state.step = STEPS.indexOf("prio"); save(); render(); };
-    var m2 = document.getElementById("manual2");
-    if(m2) m2.onclick = function(){ state.step = 0; save(); render(); };
-    document.getElementById("again").onclick = function(){
+    var backBtn = document.getElementById("back");
+    if(backBtn) backBtn.onclick = function(){ state.step = STEPS.indexOf("prio"); save(); render(); };
+    var againBtn = document.getElementById("again");
+    if(againBtn) againBtn.onclick = function(){
       state = { step:-1, area:null, prio:[], who:null, walk:null, move:null };
       save(); resumable = false; render();
     };
