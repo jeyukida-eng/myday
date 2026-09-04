@@ -1087,13 +1087,52 @@
 
   var TRAVEL_PENALTY = 1.4;   // 이동 1분당 매칭 점수 감점 — 실제 동선 기준으로 다음 장소를 고른다
 
-  function buildCourse(list, region){
-    var pool = list.filter(function(it){ return it.sp.r === region; })
-                   .sort(function(a, b){ return b.v - a.v; });
-    if(!pool.length) return [];
+  /* ============ 코스 후보 풀 — 지역·기준 조합마다 최대 20개까지 =============
+     예전엔 매번 1등 스팟만 고정으로 골라서, 같은 지역·같은 기준이면 사람이
+     달라도 항상 똑같은 코스가 나왔다. 슬롯별로 상위 후보 중 하나를 시드
+     기반으로 고르는 방식으로 바꿔, 지역+기준 조합마다 최대 20개의 서로
+     다른 코스가 나오게 한다(작은 지역은 후보가 적어 20개가 안 나올 수 있음).
+     시드가 "지역+기준"에서만 나오므로 같은 조합이면 풀 자체는 항상 재현되고,
+     그중 어떤 걸 보여줄지만 날짜/위치로 바뀐다. ==================== */
 
+  function mulberry32(seed){
+    return function(){
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function daySeed(){
+    var d = new Date();
+    return d.getFullYear() * 372 + (d.getMonth() + 1) * 31 + d.getDate();
+  }
+  function scenarioSeed(region, w){
+    var s = 0;
+    Object.keys(w).sort().forEach(function(k){
+      s = (s * 131 + k.charCodeAt(0) * 7 + Math.round(w[k] * 10)) >>> 0;
+    });
+    for(var i = 0; i < region.length; i++) s = (s * 131 + region.charCodeAt(i)) >>> 0;
+    return s;
+  }
+  function courseKey(course){
+    return course.map(function(lg){ return lg.it.sp.n; }).sort().join("|");
+  }
+
+  /* 개별 스팟 좌표는 없어서, 시·군/동네 단위 좌표로 "가장 가까운 코스"를 고른다.
+     지금은 selfmap 8유형이 전부 제주로 귀결되어 제주만 채워둠. */
+  var CITY_LOC = {
+    "제주시":{lat:33.4996,lng:126.5312}, "제주시 조천":{lat:33.5397,lng:126.6392},
+    "서귀포 성산":{lat:33.4587,lng:126.9425}, "서귀포 표선":{lat:33.3536,lng:126.8168},
+    "제주 구좌":{lat:33.5262,lng:126.8511}, "서귀포":{lat:33.2541,lng:126.5601},
+    "서귀포 남원":{lat:33.2800,lng:126.7208}, "서귀포 중문":{lat:33.2495,lng:126.4139},
+    "서귀포 하효":{lat:33.2459,lng:126.5896}, "서귀포 호근":{lat:33.2378,lng:126.5347},
+    "서귀포 안덕":{lat:33.2497,lng:126.3309}, "제주 애월":{lat:33.4626,lng:126.3306},
+    "제주 한경":{lat:33.3572,lng:126.1836}, "제주 한림":{lat:33.4111,lng:126.2683}
+  };
+
+  function buildCourseVariant(pool, region, rng){
     var used = {}, course = [];
-
     SLOTS.forEach(function(sl){
       var prevCity = course.length ? course[course.length - 1].it.sp.c : null;
       var cand = pool.filter(function(it){
@@ -1106,17 +1145,62 @@
       if(!cand.length) return;
       if(cand[0].it.v < 50 && course.length >= 3) return;
 
-      var sp = cand[0].it.sp;
+      // 항상 1등만 고르면 코스가 매번 똑같아지니, 상위 몇 개 중 하나를 시드로 고른다
+      var shortlist = cand.slice(0, Math.min(4, cand.length));
+      var chosen = shortlist[Math.floor(rng() * shortlist.length)];
+      var sp = chosen.it.sp;
       var sameCity = prevCity === null || prevCity === sp.c;
       used[sp.n] = 1;
       course.push({
         slot:sl,
-        it:cand[0].it,
+        it:chosen.it,
         alt:cand[1] ? cand[1].it.sp.n : null,
         move: sameCity ? null : { city:sp.c, min:travelMin(region, prevCity, sp.c) }
       });
     });
     return course;
+  }
+
+  function buildCoursePool(list, region, maxN){
+    var pool0 = list.filter(function(it){ return it.sp.r === region; })
+                     .sort(function(a, b){ return b.v - a.v; });
+    if(!pool0.length) return [];
+    var baseSeed = scenarioSeed(region, weights());
+    var seen = {}, variants = [];
+    var attempts = 0, maxAttempts = maxN * 8;
+    while(variants.length < maxN && attempts < maxAttempts){
+      var rng = mulberry32((baseSeed + attempts * 7919) >>> 0);
+      var course = buildCourseVariant(pool0, region, rng);
+      if(course.length){
+        var key = courseKey(course);
+        if(!seen[key]){ seen[key] = 1; variants.push(course); }
+      }
+      attempts++;
+    }
+    return variants;
+  }
+
+  function nearestVariant(pool, userLat, userLng){
+    var best = null, bestD = Infinity;
+    pool.forEach(function(course){
+      var first = course[0];
+      var loc = first && CITY_LOC[first.it.sp.c];
+      if(!loc) return;
+      var d = haversineKm(userLat, userLng, loc.lat, loc.lng);
+      if(d < bestD){ bestD = d; best = course; }
+    });
+    return best;
+  }
+
+  function buildCourse(list, region){
+    var pool = buildCoursePool(list, region, 20);
+    if(!pool.length) return [];
+    if(state._geo && state._geo.region === region){
+      var near = nearestVariant(pool, state._geo.lat, state._geo.lng);
+      if(near) return near;
+    }
+    var idx = Math.abs((scenarioSeed(region, weights()) + daySeed()) % pool.length);
+    return pool[idx];
   }
 
   function pct(v){ return Math.max(38, Math.min(99, Math.round(v))); }
@@ -1688,6 +1772,20 @@
         var userOnJeju = pos.coords.latitude >= 33.05 && pos.coords.latitude <= 33.60
           && pos.coords.longitude >= 126.05 && pos.coords.longitude <= 126.99;
         var isJejuTrip = best.r && best.r.indexOf("JJ") === 0 && !userOnJeju;
+
+        /* 도내(제주)에 있으면, 20개 코스 후보 중 지금 위치와 가장 가까운 곳으로
+           한 번만 다시 짜서 보여준다 — 매번 다시 계산하지 않도록 첫 위치 확인
+           때만 적용하고, 어차피 같은 코스면 다시 그리지 않는다. */
+        if(userOnJeju && best.r && best.r.indexOf("JJ") === 0 && !state._geoApplied){
+          state._geoApplied = true;
+          state._geo = { lat: pos.coords.latitude, lng: pos.coords.longitude, region: best.r };
+          var nearCourse = buildCourse(list, best.r);
+          if(nearCourse.length && courseKey(nearCourse) !== courseKey(course)){
+            render();
+            return;
+          }
+        }
+
         if(isJejuTrip){
           note.innerHTML = '📍 현재 위치에서 ' + esc(RG.n) + '까지 직선거리 약 <b style="color:var(--sun)">' + km.toFixed(0) + 'km</b>'
             + ' · 바다 건너라 항공편 이용을 권합니다 (공항~코스 시작지 이동시간은 별도)';
