@@ -1387,22 +1387,46 @@
           cafe:{ name:"카페 아일", city:"안면도 꽃지해변", reason:"꽃지해변 앞 노을 명소로 꼽히는 오션뷰 카페", q:"안면도 꽃지해변 카페 아일" } }
   };
 
+  /* 개별 스팟 근처 맛집·카페 — 큰엉 해안경승지처럼 특정 장소 단위로 추가되는 자리.
+     아직 전체 135개 스팟을 다 채우진 못했고, 있는 스팟만 골라 리뷰·평점 확인 후 채운다.
+     여기 없는 스팟은 courseBlockHTML 끝의 지역 단위 FOOD 추천으로 대체된다. */
+  var SPOT_FOOD = {
+    "큰엉 해안경승지": {
+      restaurant:{ name:"큰엉식당", city:"서귀포 남원", reason:"흑돼지·갈치조림·고등어조림·전복뚝배기, 큰엉 산책로 바로 옆", q:"서귀포 남원읍 태위로 276 큰엉식당" },
+      cafe:{ name:"모노클제주", city:"서귀포 남원 위미", reason:"넓은 잔디 정원의 베이커리 카페, 평점 4.4의 디저트 맛집", q:"서귀포 남원 위미리 모노클제주" }
+    },
+    "서귀포 매일올레시장": {
+      restaurant:{ name:"오는정김밥", city:"서귀포 올레시장", reason:"올레시장 4대 명물 중 하나, 꽁치김밥으로 전국구 유명세", q:"서귀포 매일올레시장 오는정김밥" },
+      cafe:{ name:"플레이커피랩", city:"서귀포 이중섭거리", reason:"시장에서 도보 7분, 직접 로스팅한 스페셜티 커피와 크로플", q:"서귀포 이중섭거리 플레이커피랩" }
+    }
+  };
+
+  function foodRow(badge, item){
+    return '<div class="pt"><div class="h"><span class="badge">' + badge + '</span>'
+      + '<span class="kind">' + esc(item.city) + '</span></div>'
+      + '<div class="nm2">' + esc(item.name) + '</div>'
+      + '<p class="sig">' + esc(item.reason) + '</p>'
+      + '<a class="mapl" href="' + mapURL(item.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
+      + '</div>';
+  }
+
+  function spotFoodHTML(spotName){
+    var f = SPOT_FOOD[spotName];
+    if(!f) return "";
+    return '<div class="stack-s" style="margin-top:14px">'
+      + '<div style="font-size:11.5px;font-weight:700;letter-spacing:.03em;color:var(--txt-3)">이 근처 맛집 · 카페</div>'
+      + foodRow("맛집", f.restaurant) + foodRow("카페", f.cafe)
+      + '</div>';
+  }
+
   function foodHTML(regionCode){
     var f = FOOD[regionCode];
     if(!f) return "";
-    function row(badge, item){
-      return '<div class="pt"><div class="h"><span class="badge">' + badge + '</span>'
-        + '<span class="kind">' + esc(item.city) + '</span></div>'
-        + '<div class="nm2">' + esc(item.name) + '</div>'
-        + '<p class="sig">' + esc(item.reason) + '</p>'
-        + '<a class="mapl" href="' + mapURL(item.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
-        + '</div>';
-    }
     return '<div class="conn">이 지역 맛집 · 카페</div>'
       + '<div class="lcard">'
       + '<div class="nm" style="margin-bottom:2px">추천 한 곳씩</div>'
       + '<div class="loc">리뷰·평점 확인 후 고른 곳 · 방문 전 영업시간 재확인</div>'
-      + row("맛집", f.restaurant) + row("카페", f.cafe)
+      + foodRow("맛집", f.restaurant) + foodRow("카페", f.cafe)
       + '</div>';
   }
 
@@ -1504,6 +1528,7 @@
         + '<div class="loc">' + esc(sp.c) + '</div>'
         + '<p class="ln">' + esc(sp.one) + '</p>'
         + '<a class="mapl" href="' + mapURL(sp.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
+        + spotFoodHTML(sp.n)
         + '<details class="place-details"><summary>이 장소가 나에게 맞는 이유</summary><p class="st"><b>여기 이런 이야기가</b> — ' + esc(sp.story) + '</p>'
         + (lg.alt ? '<p class="altl">이 시간대 대안 — <b>' + esc(lg.alt) + '</b></p>' : '')
         + (lg.pt ? ptHTML(lg.pt) : '')
