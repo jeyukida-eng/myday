@@ -1222,6 +1222,19 @@
     save();
   })();
 
+  /* 위치 권한은 결과 화면에 도착해서야 물으면 이미 기본 코스가 한 번 뜬 뒤라
+     화면이 바뀌는 게 어색하다. 그래서 앱을 여는 시점(질문에 답하는 동안)에
+     미리 한 번 물어보고, 결과 화면에서는 이미 받아둔 좌표를 바로 써서
+     첫 렌더부터 위치 기반 코스가 나오게 한다. */
+  var earlyGeo = null;
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(pos){
+      var onJeju = pos.coords.latitude >= 33.05 && pos.coords.latitude <= 33.60
+        && pos.coords.longitude >= 126.05 && pos.coords.longitude <= 126.99;
+      earlyGeo = { lat: pos.coords.latitude, lng: pos.coords.longitude, onJeju: onJeju };
+    }, function(){ /* 거부·실패 — 기본 코스로 진행 */ }, { timeout: 8000 });
+  }
+
   /* ============ 채점 ============ */
 
   var PW = [3, 2, 1.2];   // 1·2·3순위 가중치
@@ -1995,6 +2008,12 @@
       : "OTHER REGIONS · 범위를 넓히면";
 
     var best = top3[0];
+    /* 질문에 답하는 동안 미리 받아둔 위치가 있으면 첫 렌더부터 바로 쓴다 —
+       결과가 뜬 뒤에 위치를 물어서 코스가 다시 바뀌는 어색함을 없앤다. */
+    if(earlyGeo && earlyGeo.onJeju && best.r && best.r.indexOf("JJ") === 0){
+      state._geo = { lat: earlyGeo.lat, lng: earlyGeo.lng, region: best.r };
+      state._geoApplied = true;
+    }
     var course = buildCourse(list, best.r);
     var RG = REGION[best.r];
     applyMood(courseMood(course));
