@@ -1402,9 +1402,10 @@
       var baseCand = pool.filter(function(it){
         return it.sp.sl.indexOf(sl.k) >= 0 && !used[it.sp.n] && isMarketOpenToday(it.sp.n);
       });
-      // 첫 슬롯은 지정된 동네(anchorCity)로 최대한 시작해본다 — 그 동네에
-      // 이 시간대 후보가 없으면 지역 전체 후보로 자연스럽게 되돌아간다.
-      var anchored = (slotIdx === 0 && anchorCity)
+      // 앵커 동네(anchorCity) 안에서 하루를 끝내는 게 원칙 — 모든 슬롯이
+      // 우선 같은 동네 후보만 본다. 그 동네에 이 시간대 후보가 정말 하나도
+      // 없을 때만 지역 전체 후보로 자연스럽게 되돌아간다.
+      var anchored = anchorCity
         ? baseCand.filter(function(it){ return it.sp.c === anchorCity; })
         : [];
       var cand = (anchored.length ? anchored : baseCand).map(function(it){
