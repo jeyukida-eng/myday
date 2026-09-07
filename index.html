@@ -1288,6 +1288,22 @@
       var m = a.reduce(function(p, c){ return p + c; }, 0) / a.length;
       out.push({ r:r, v:m });
     });
+
+    /* 제주 안에서 검색 중이면, 취향 점수만 보고 "서귀동에 있는데 왜 정반대
+       안덕이 뜨지" 같은 위화감이 생긴다. 지금 위치에서 가까운 제주 권역일수록
+       약간의 가산점을 줘서 취향 점수가 비슷할 땐 가까운 쪽이 이기게 하되,
+       취향 차이가 크면 여전히 취향이 이긴다(최대 16점, 100점 만점 기준). */
+    if(earlyGeo && earlyGeo.onJeju){
+      var jejuRegions = out.filter(function(o){ return o.r.indexOf("JJ") === 0 && REGION[o.r]; });
+      if(jejuRegions.length){
+        var dists = jejuRegions.map(function(o){
+          return haversineKm(earlyGeo.lat, earlyGeo.lng, REGION[o.r].lat, REGION[o.r].lng);
+        });
+        var maxD = Math.max.apply(null, dists) || 1;
+        jejuRegions.forEach(function(o, i){ o.v += 16 * (1 - dists[i] / maxD); });
+      }
+    }
+
     out.sort(function(a, b){ return b.v - a.v; });
     return out;
   }
