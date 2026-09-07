@@ -1296,6 +1296,17 @@
     return days.indexOf(new Date().getDate() % 10) >= 0;
   }
 
+  /* 비가 와야만 실제로 볼거리가 생기는 스팟(예: 엉또폭포는 평소엔 마른 절벽,
+     비가 많이 온 뒤에만 폭포가 생기는 건천 폭포). 맑은 날 추천하면 가서
+     보니 그냥 절벽이라 실망하게 되므로, 오늘 날씨가 비/눈일 때만 후보에
+     넣는다. 날씨를 아직 확인 전(badWeather 정보 없음)이면 일단 빼둔다 —
+     맑을 확률이 더 높은 쪽으로 안전하게 기본값을 잡는다. */
+  var RAIN_ONLY_SPOTS = { "엉또폭포": true };
+  function isRainReady(name, badWeather){
+    if(!RAIN_ONLY_SPOTS[name]) return true;
+    return !!badWeather;
+  }
+
   /* ============ 코스 후보 풀 — 지역·기준 조합마다 최대 20개까지 =============
      예전엔 매번 1등 스팟만 고정으로 골라서, 같은 지역·같은 기준이면 사람이
      달라도 항상 똑같은 코스가 나왔다. 슬롯별로 상위 후보 중 하나를 시드
@@ -1347,7 +1358,8 @@
     SLOTS.forEach(function(sl, slotIdx){
       var prevCity = course.length ? course[course.length - 1].it.sp.c : null;
       var baseCand = pool.filter(function(it){
-        return it.sp.sl.indexOf(sl.k) >= 0 && !used[it.sp.n] && isMarketOpenToday(it.sp.n);
+        return it.sp.sl.indexOf(sl.k) >= 0 && !used[it.sp.n] && isMarketOpenToday(it.sp.n)
+          && isRainReady(it.sp.n, badWeather);
       });
       // 앵커 동네(anchorCity) 안에서 하루를 끝내는 게 원칙 — 모든 슬롯이
       // 우선 같은 동네 후보만 본다. 그 동네에 이 시간대 후보가 정말 하나도
