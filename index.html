@@ -247,6 +247,7 @@
   body,.route-choice{--sun:var(--mood);--sun-deep:var(--mood-line);--sea:var(--mood);--sea-deep:var(--mood-line);--surface:var(--mood-soft);--hair:var(--mood-line);--hair-2:var(--mood-line);--txt:#25394A;--txt-2:#596B76;--txt-3:#71808B}
   html{background:#F3FAFE}body{background:var(--mood-bg);transition:background .35s ease;color:var(--txt);font-size:16px}
   .wrap{max-width:1060px;padding:28px 26px 54px;min-height:0}.app-header{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:23px 26px 0;gap:16px}.app-brand{display:flex;align-items:center;gap:9px;border:0;background:none;padding:0;color:var(--mood-bold);font-size:19px;font-weight:800;letter-spacing:-.04em}.app-brand svg{width:27px;height:27px}.app-header>span{font-size:12px;color:var(--txt-3);letter-spacing:.1em}
+  .lang-switch{display:flex;gap:4px}.lang-switch button{border:1px solid var(--hair-2);background:transparent;color:var(--txt-3);font-size:11px;padding:5px 9px;border-radius:999px;letter-spacing:0}.lang-switch button[aria-pressed="true"]{background:var(--mood-bold);color:var(--void,#111);border-color:var(--mood-bold)}
   .tag{font-size:12px;letter-spacing:.05em}.btn{font-size:15px;padding:12px 21px;border:1px solid var(--mood-line);border-radius:12px;color:var(--mood);background:#FFF}.btn.solid{background:var(--mood);color:#FFF}.btn:hover,.btn.quiet:hover{background:var(--mood-soft);color:var(--mood)}.btn.solid:hover{background:var(--mood-bold);color:white}
   .band{border-color:var(--mood-line)}.tag.on,.tag.sea{color:var(--mood)}.route-tabs{padding:0;margin:20px 0 24px;gap:12px;background:none;border:0}.route-tabs button{position:relative;border:1px solid var(--mood-line);background:#FFF;border-radius:16px;padding:16px 14px;text-align:left;color:var(--mood-bold);font-size:16px;transition:background .2s ease}.route-tabs button small{font-size:12px;margin-top:5px;color:inherit;opacity:.85}.route-tabs button[aria-pressed="true"]{background:var(--mood);border-color:var(--mood);color:#FFF;box-shadow:0 8px 18px #25394A12}.route-tabs .tab-mood{display:block;font-size:12px;font-weight:600;letter-spacing:.07em;margin-bottom:4px}
   .route-choice>.band{padding:0;border:0}.route-choice>.band>.stack{gap:20px}.result-intro{border:0;padding:0!important}.result-intro .themetitle{font-size:28px;letter-spacing:-.04em}.result-intro .stack{gap:12px}.prio span{background:#FFF;border:1px solid var(--mood-line);color:var(--mood-bold);font-size:13px}.route-explainer{background:#FFF;border:1px solid var(--mood-line);padding:11px 15px}
@@ -266,7 +267,7 @@
 </style>
 </head>
 <body>
-<header class="app-header"><button class="app-brand" id="appHome" aria-label="처음으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zM9 3v16M15 5v16"/></svg>나에게 맞는 하루</button><span>MY DAY · YOUR WAY</span></header>
+<header class="app-header"><button class="app-brand" id="appHome" aria-label="처음으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zM9 3v16M15 5v16"/></svg>나에게 맞는 하루</button><div class="lang-switch" id="langSwitch" role="group" aria-label="언어 선택"><button data-lang="ko" aria-pressed="true">한국어</button><button data-lang="en" aria-pressed="false">EN</button><button data-lang="zh" aria-pressed="false">中文</button><button data-lang="ja" aria-pressed="false">日本語</button></div></header>
 <div class="aura"></div><div class="aura2"></div><div class="aura3"></div><div class="vig"></div><div class="grain"></div>
 <div class="wrap"><div id="app"></div></div>
 
@@ -1020,6 +1021,132 @@
   })();
   var resumable = state.prio && state.prio.length > 0;
 
+  /* ============ 다국어 ============
+     UI 문구는 렌더링 결과를 문자열 그대로 바꾸는 대신, DOM에 실제로 붙은 뒤
+     텍스트 노드를 훑어서 UI_DICT에 있는 한국어 문구와 정확히 일치하면
+     번역으로 바꿔치기한다(translatePage). render() 내부의 긴 문자열 조합
+     코드를 전부 t() 호출로 바꾸는 건 지금 앱 규모에서 회귀 위험이 커서,
+     화면에 나온 뒤 한 번 훑는 방식을 택했다. 스팟 이름·한줄·스토리처럼
+     동적으로 들어가는 텍스트는 SPOT_I18N을 통해 별도로 번역한다(spotName 등).
+     두 사전 다 지금은 한국어만 채워져 있고, 나머지 언어는 이후 채워 넣는다. */
+  var LANG_KEY = "myday-lang";
+  var lang = "ko";
+  try{ var savedLang = localStorage.getItem(LANG_KEY); if(savedLang) lang = savedLang; }catch(e){}
+
+  var UI_DICT = {
+    "MY DAY · 취향으로 만드는 여행": { en:"MY DAY · Built From Your Taste", zh:"MY DAY · 用你的喜好定制", ja:"MY DAY · 好みで作る旅" },
+    "오늘은 어디에서": { en:"Where will you be", zh:"今天要在哪里", ja:"今日はどこで" },
+    "나답게 놀까요?": { en:"most yourself today?", zh:"做自己想做的事？", ja:"自分らしく過ごす？" },
+    "가고 싶은 지역과 좋아하는 여행 방식을 고르면, 오전부터 저녁까지 나에게 맞는 코스를 짜 드려요.": {
+      en:"Pick the area and travel style you like, and we'll build a full day's course for you.",
+      zh:"选择想去的地区和喜欢的旅行方式，我们会为你安排从早到晚的一日行程。",
+      ja:"行きたい地域と好きな旅のスタイルを選ぶと、朝から夜までのコースを組み立てます。" },
+    "나의 하루 코스 만들기": { en:"Build My Day Course", zh:"制定我的一日行程", ja:"マイデイコースを作る" },
+    "내 취향으로 코스 보기": { en:"See My Course", zh:"查看专属行程", ja:"自分の好みでコースを見る" },
+    "이어서 만들기": { en:"Continue", zh:"继续制作", ja:"続きから" },
+    "사진 출처": { en:"Photo credit", zh:"图片来源", ja:"写真の出典" },
+    "이전": { en:"Back", zh:"上一步", ja:"戻る" },
+    "다음": { en:"Next", zh:"下一步", ja:"次へ" },
+    "코스 보기": { en:"See Course", zh:"查看行程", ja:"コースを見る" },
+    "어디로 갈지 정했나요?": { en:"Have you picked where to go?", zh:"决定好要去哪里了吗？", ja:"行き先は決まりましたか？" },
+    "정하지 않았다면 제주 전 권역에서 골라 드립니다.": { en:"If not, we'll search all of Jeju for you.", zh:"如果还没决定，我们会在济州全岛范围内为你推荐。", ja:"決まっていなければ、済州全域から選びます。" },
+    "누구와 갑니까?": { en:"Who's coming with you?", zh:"和谁一起去？", ja:"誰と行きますか？" },
+    "동행에 따라 코스에서 빠지는 곳이 있습니다.": { en:"Some spots are excluded depending on who you're with.", zh:"根据同行人不同，部分景点会被排除。", ja:"同行者によって除外される場所があります。" },
+    "얼마나 걸을 수 있나요?": { en:"How much can you walk?", zh:"能走多少路？", ja:"どのくらい歩けますか？" },
+    "체력을 넘는 코스는 만족도가 떨어집니다.": { en:"A course beyond your stamina lowers satisfaction.", zh:"超出体力的行程会降低满意度。", ja:"体力を超えるコースは満足度が下がります。" },
+    "이동 수단은요?": { en:"How will you get around?", zh:"交通方式是？", ja:"移動手段は？" },
+    "대중교통이면 접근성 좋은 곳 위주로 짜 드립니다.": { en:"For public transit, we'll favor easy-to-reach spots.", zh:"若使用大众交通，会优先安排交通便利的地点。", ja:"公共交通機関ならアクセスの良い場所を中心に組みます。" },
+    "코스는 어떻게 이용하나요?": { en:"How do I use this course?", zh:"这个行程要怎么用？", ja:"コースの使い方は？" },
+    "코스 카드 저장": { en:"Save Course Card", zh:"保存行程卡片", ja:"コースカードを保存" },
+    "이 코스 카드 저장": { en:"Save This Course Card", zh:"保存此行程卡片", ja:"このコースカードを保存" },
+    "지도에서 열기 →": { en:"Open in Map →", zh:"在地图中打开 →", ja:"地図で開く →" },
+    "이 장소가 나에게 맞는 이유": { en:"Why this spot fits me", zh:"为什么这个地方适合我", ja:"この場所が自分に合う理由" },
+    "완주": { en:"Complete", zh:"完成", ja:"完走" },
+    "오늘의 스탬프": { en:"Today's Stamps", zh:"今日印章", ja:"今日のスタンプ" },
+    "TRADE-OFF": { en:"TRADE-OFF", zh:"权衡取舍", ja:"トレードオフ" },
+    "이번 코스가 포기한 것": { en:"What this course gives up", zh:"本次行程放弃的部分", ja:"今回のコースが諦めたもの" },
+    "SAVE": { en:"SAVE", zh:"保存", ja:"保存" },
+    "기준 바꾸기": { en:"Change Criteria", zh:"更改条件", ja:"条件を変える" },
+    "처음부터": { en:"Start Over", zh:"重新开始", ja:"最初から" },
+    "지역을 누르면 그 지역으로 코스를 다시 짜 드립니다.": { en:"Tap a region and we'll rebuild the course there.", zh:"点击地区，即可重新安排该地区的行程。", ja:"地域をタップするとその地域でコースを組み直します。" },
+    "오전": { en:"Morning", zh:"上午", ja:"午前" },
+    "점심": { en:"Lunch", zh:"午餐", ja:"昼食" },
+    "오후": { en:"Afternoon", zh:"下午", ja:"午後" },
+    "노을": { en:"Sunset", zh:"日落", ja:"夕焼け" },
+    "저녁": { en:"Dinner", zh:"晚餐", ja:"夕食" },
+    "🏠 실내": { en:"🏠 Indoor", zh:"🏠 室内", ja:"🏠 屋内" },
+    "🌳 야외": { en:"🌳 Outdoor", zh:"🌳 户外", ja:"🌳 屋外" },
+    "처음으로": { en:"Home", zh:"回到首页", ja:"ホームへ" },
+    "🌊 예쁜 풍경": { en:"🌊 Pretty Scenery", zh:"🌊 优美风景", ja:"🌊 美しい景色" },
+    "🍊 맛있는 음식": { en:"🍊 Great Food", zh:"🍊 美食", ja:"🍊 美味しい食事" },
+    "🏄 재미있는 체험": { en:"🏄 Fun Activities", zh:"🏄 有趣的体验", ja:"🏄 楽しい体験" },
+    "📖 이야기": { en:"📖 Stories", zh:"📖 故事", ja:"📖 物語" },
+    "📸 사진": { en:"📸 Photos", zh:"📸 拍照", ja:"📸 写真" },
+    "🚗 편한 이동": { en:"🚗 Easy Access", zh:"🚗 交通便利", ja:"🚗 移動の楽さ" },
+    "💰 가성비": { en:"💰 Good Value", zh:"💰 高性价比", ja:"💰 コスパ" },
+    "예쁜 풍경": { en:"Pretty Scenery", zh:"优美风景", ja:"美しい景色" },
+    "맛있는 음식": { en:"Great Food", zh:"美食", ja:"美味しい食事" },
+    "재미있는 체험": { en:"Fun Activities", zh:"有趣的体验", ja:"楽しい体験" },
+    "이야기": { en:"Stories", zh:"故事", ja:"物語" },
+    "사진": { en:"Photos", zh:"拍照", ja:"写真" },
+    "편한 이동": { en:"Easy Access", zh:"交通便利", ja:"移動の楽さ" },
+    "가성비": { en:"Good Value", zh:"高性价比", ja:"コスパ" }
+  };   // "처음부터" -> { en:"Start Over", zh:"…", ja:"…" }
+  var SPOT_I18N = {};  // spot.n(한국어 이름) -> { en:{name,one,story}, zh:{…}, ja:{…} }
+
+  function setLang(code){
+    lang = code;
+    try{ localStorage.setItem(LANG_KEY, code); }catch(e){}
+    render();
+  }
+
+  function spotField(sp, field){
+    var tr = SPOT_I18N[sp.n];
+    if(lang !== "ko" && tr && tr[lang] && tr[lang][field]) return tr[lang][field];
+    return sp[field === "one" ? "one" : field]; // field: "name"|"one"|"story" — sp.n/one/story
+  }
+  function spotName(sp){ return spotField(sp, "name") || sp.n; }
+  function spotOne(sp){ return lang !== "ko" && SPOT_I18N[sp.n] && SPOT_I18N[sp.n][lang] && SPOT_I18N[sp.n][lang].one || sp.one; }
+  function spotStory(sp){ return lang !== "ko" && SPOT_I18N[sp.n] && SPOT_I18N[sp.n][lang] && SPOT_I18N[sp.n][lang].story || sp.story; }
+
+  var CITY_I18N = {
+    "제주시":       { en:"Jeju City",        zh:"济州市",        ja:"済州市" },
+    "제주시 조천":   { en:"Jocheon, Jeju City", zh:"朝天，济州市",  ja:"朝天（済州市）" },
+    "서귀포 성산":   { en:"Seongsan, Seogwipo", zh:"城山，西归浦",  ja:"城山（西帰浦）" },
+    "서귀포 표선":   { en:"Pyoseon, Seogwipo",  zh:"表善，西归浦",  ja:"表善（西帰浦）" },
+    "제주 구좌":    { en:"Gujwa, Jeju",       zh:"旧左，济州",    ja:"旧左（済州）" },
+    "서귀포":       { en:"Seogwipo",          zh:"西归浦",       ja:"西帰浦" },
+    "서귀포 남원":   { en:"Namwon, Seogwipo",  zh:"南元，西归浦",  ja:"南元（西帰浦）" },
+    "서귀포 중문":   { en:"Jungmun, Seogwipo", zh:"中文，西归浦",  ja:"中文（西帰浦）" },
+    "서귀포 하효":   { en:"Hyodo, Seogwipo",   zh:"孝敦，西归浦",  ja:"孝敦（西帰浦）" },
+    "서귀포 호근":   { en:"Hogeun, Seogwipo",  zh:"好近，西归浦",  ja:"好近（西帰浦）" },
+    "서귀포 안덕":   { en:"Andeok, Seogwipo",  zh:"安德，西归浦",  ja:"安徳（西帰浦）" },
+    "제주 애월":    { en:"Aewol, Jeju",       zh:"涯月，济州",    ja:"涯月（済州）" },
+    "제주 한경":    { en:"Hangyeong, Jeju",   zh:"翰京，济州",    ja:"翰京（済州）" },
+    "제주 한림":    { en:"Hallim, Jeju",      zh:"翰林，济州",    ja:"翰林（済州）" }
+  };
+  function cityName(c){ return (lang !== "ko" && CITY_I18N[c] && CITY_I18N[c][lang]) || c; }
+
+  function translatePage(root){
+    if(lang === "ko" || !root) return;
+    var dict = {};
+    Object.keys(UI_DICT).forEach(function(k){ if(UI_DICT[k][lang]) dict[k] = UI_DICT[k][lang]; });
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while((node = walker.nextNode())){
+      var trimmed = node.nodeValue.trim();
+      if(trimmed && dict[trimmed] != null){
+        node.nodeValue = node.nodeValue.replace(trimmed, dict[trimmed]);
+      }
+    }
+    root.querySelectorAll("[aria-label],[alt],[placeholder]").forEach(function(el){
+      ["aria-label","alt","placeholder"].forEach(function(attr){
+        var v = el.getAttribute(attr);
+        if(v && dict[v] != null) el.setAttribute(attr, dict[v]);
+      });
+    });
+  }
+
   /* 자아찾기 앱에서 ?prio=see,story,shot&type=IF 형태로 넘어온 경우 그 값을 받는다 */
   (function importFromSelfMap(){
     var qp = new URLSearchParams(window.__TRAVEL_SEARCH__ || location.search);
@@ -1441,11 +1568,17 @@
     window.scrollTo(0, 0);
     document.body.dataset.view = state.step < 0 ? "intro" : state.step >= STEPS.length ? "result" : "questions";
     if(state.step < STEPS.length) applyMood("ocean");
-    if(state.step === -1) return renderIntro();
-    if(state.step >= STEPS.length) return renderResult();
-    var k = STEPS[state.step];
-    if(k === "prio") return renderPrio();
-    return renderPick(state.step);
+    if(state.step === -1) renderIntro();
+    else if(state.step >= STEPS.length) renderResult();
+    else if(STEPS[state.step] === "prio") renderPrio();
+    else renderPick(state.step);
+    translatePage(app);
+    var langSwitch = document.getElementById("langSwitch");
+    if(langSwitch){
+      langSwitch.querySelectorAll("button").forEach(function(b){
+        b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+      });
+    }
   }
 
   function renderIntro(){
@@ -1722,14 +1855,14 @@
         + '<span class="mt"><s>MATCH</s>' + pct(lg.it.v) + '</span>'
         + '</div>'
         + '<div class="tear"></div>'
-        + (sp.img ? '<img class="stop-photo" src="' + esc(imageHref(sp.img)) + '" alt="' + esc(sp.n) + '" loading="lazy" onerror="this.hidden=true">' : '<div class="stop-symbol" aria-hidden="true">' + (lg.slot.k === "l" || lg.slot.k === "e" ? "🍽️" : M.icon) + '</div>')
-        + '<div class="nm">' + esc(sp.n) + '</div>'
-        + '<div class="loc">' + esc(sp.c) + '</div>'
-        + '<p class="ln">' + esc(sp.one) + '</p>'
+        + (sp.img ? '<img class="stop-photo" src="' + esc(imageHref(sp.img)) + '" alt="' + esc(spotName(sp)) + '" loading="lazy" onerror="this.hidden=true">' : '<div class="stop-symbol" aria-hidden="true">' + (lg.slot.k === "l" || lg.slot.k === "e" ? "🍽️" : M.icon) + '</div>')
+        + '<div class="nm">' + esc(spotName(sp)) + '</div>'
+        + '<div class="loc">' + esc(cityName(sp.c)) + '</div>'
+        + '<p class="ln">' + esc(spotOne(sp)) + '</p>'
         + (lg.pt && lg.pt.st === "live" ? ptHTML(lg.pt) : '')
         + '<a class="mapl" href="' + mapURL(sp.q) + '" target="_blank" rel="noopener">지도에서 열기 →</a>'
         + spotFoodHTML(sp.n)
-        + '<details class="place-details"><summary>이 장소가 나에게 맞는 이유</summary><p class="st"><b>여기 이런 이야기가</b> — ' + esc(sp.story) + '</p>'
+        + '<details class="place-details"><summary>이 장소가 나에게 맞는 이유</summary><p class="st"><b>여기 이런 이야기가</b> — ' + esc(spotStory(sp)) + '</p>'
         + (lg.alt ? '<p class="altl">이 시간대 대안 — <b>' + esc(lg.alt) + '</b></p>' : '')
         + (lg.pt && lg.pt.st !== "live" ? ptHTML(lg.pt) : '')
         + '</details></div>';
@@ -2037,6 +2170,14 @@
   document.documentElement.dataset.embedded = window.parent !== window ? "true" : "false";
   var homeButton = document.getElementById("appHome");
   if(homeButton) homeButton.onclick = function(){ resumable = !!(state.prio && state.prio.length); state.step = -1; save(); render(); };
+
+  var langSwitchEl = document.getElementById("langSwitch");
+  if(langSwitchEl){
+    langSwitchEl.querySelectorAll("button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+      b.onclick = function(){ setLang(b.dataset.lang); };
+    });
+  }
 
   if(document.fonts && document.fonts.ready){
     document.fonts.ready.then(function(){ if(state.step >= STEPS.length) render(); });
