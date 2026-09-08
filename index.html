@@ -235,6 +235,9 @@
   .pick,.crit{background:white;box-shadow:none;font-size:15px}.crit .t{font-size:16px}.crit .d,.pick small{font-size:13px}.crit[aria-pressed="true"]{border-color:var(--sea);background:#EAF7EE;box-shadow:none}.crit[aria-pressed="true"] .t{color:var(--sea)}.crit[aria-pressed="true"] .ord{background:var(--sea);color:#FFF}.pick[aria-pressed="true"]{background:#EAF7EE;box-shadow:none}.pick[aria-pressed="true"]::before{box-shadow:none}.toast{background:#193D34;color:white;border:0;box-shadow:none;font-size:14px}
   .route-explainer{font-size:13px;color:var(--txt-2);background:#F6F9F7;border-radius:12px;padding:12px 15px}.route-explainer>summary{cursor:pointer}.route-explainer p{margin-top:10px}
   @media(max-width:600px){.wrap{padding:21px 16px 24px}.themetitle{font-size:25px}.route-tabs{gap:6px}.route-tabs button{padding:10px 6px;font-size:12px}.lcard{padding:17px;border-radius:16px}.lcard .nm{font-size:22px}.stop-photo{height:153px}.lcard .ln{font-size:15px}.lcard .top{gap:6px}.lcard .mt s{display:none}.route-choice>.band{padding-top:20px}.course{gap:13px}.btnrow .btn{flex:1;min-width:120px}.stack{gap:14px}}
+  /* word-break:keep-all은 띄어쓰기가 있는 한국어 기준. 중국어/일본어는 띄어쓰기가 없어
+     keep-all이 걸리면 줄바꿈 지점이 사라져 문장이 뷰포트를 넘어간다. 한국어가 아닐 때만 되돌린다. */
+  body[data-lang="zh"] *, body[data-lang="ja"] *{ word-break:normal; overflow-wrap:break-word; }
 </style>
 
 <style id="adaptive-course-theme">
@@ -2392,6 +2395,156 @@
       en: { name:"Yawon", one:"A thatched-roof hanok cafe within the gotjawal forest, displaying over 1,000 traditional earthenware pots.", story:"A thatched-roof hanok cafe within the gotjawal forest, displaying over 1,000 traditional earthenware pots." },
       zh: { name:"野园", one:"곶자왈中的茅草屋韩屋咖啡馆，展示逾千件传统陶瓮。", story:"곶자왈中的茅草屋韩屋咖啡馆，展示逾千件传统陶瓮。" },
       ja: { name:"ヤウォン（野園）", one:"コッチャワルの中にある茅葺き韓屋カフェ。伝統の甕（オンギ）約1,000点を展示。", story:"コッチャワルの中にある茅葺き韓屋カフェ。伝統の甕（オンギ）約1,000点を展示。" }
+    },
+    "속골유원지": {
+      en: { name:"Sokgol Recreation Area", one:"A hidden valley where forest meets sea in Hogeun-dong, a peaceful stop along Jeju Olle Trail Course 7", story:"Near the coast of Hogeun-dong, beside Seogwipo Girls' High School, a stream winds through dense forest all the way down to the sea. More a local retreat where Seogwipo residents cool their feet in summer than a tourist hotspot, the lower valley has a small stone bridge, and the octagonal pavilion offers views of both Beomseom Island and the sea off Seogwipo." },
+      zh: { name:"속골休闲区", one:"森林与大海在好近洞交汇的隐秘溪谷,济州偶来第7条小路途经的休憩地", story:"在西归浦女子高中旁、好近洞海边附近,一条溪水穿过茂密森林,一路流向大海。比起游客,这里更是西归浦本地居民夏天戏水纳凉的去处,溪谷下游架有一座小石桥,登上八角亭可将凡岛与西归浦近海风光尽收眼底。" },
+      ja: { name:"ソッコル遊園地", one:"森と海が出会う好近洞(ホグンドン)の隠れた渓谷、済州オルレ7コースが通る憩いの場", story:"西帰浦女子高校のそば、好近洞の海辺近くを、鬱蒼とした森を抜けた渓流がそのまま海まで流れ込む。観光客よりも西帰浦の住民が夏に足を浸して涼む場所として親しまれ、渓谷の下流には小さな石橋が架かり、八角亭からはポムソム(凡島)と西帰浦沖の海を一望できる。" }
+    },
+    "서귀포 석부작박물관": {
+      en: { name:"Seogwipo Seokbujak Museum", one:"A museum devoted to seokbujak, the art of growing wildflowers on stone", story:"Located in Hogeun-dong, this museum is one of the few in Korea dedicated to seokbujak, a distinctively Jeju form of horticultural art in which native plants are grown directly on stone. Striking stone-and-bonsai arrangements of many shapes and sizes are laid out like a garden, making it a relaxing stop even on a rainy day." },
+      zh: { name:"西归浦石附作博物馆", one:"专门展示“石附作”艺术——将野生花卉附着于石头上培育的博物馆", story:"这座位于好近洞的博物馆,是韩国少数专门展示“石附作”的展览空间——石附作是济州特有的园艺艺术,将本地植物直接附着在石头上培育而成。形态各异的奇石与盆景如花园般铺展开来,即使雨天也能悠然参观。" },
+      ja: { name:"西帰浦石付作(ソクブジャク)博物館", one:"石と野草を組み合わせる伝統芸術「石付作(ソクブジャク)」を専門に扱う博物館", story:"好近洞にあるこの博物館は、石の上に自生植物を活着させて育てる済州特有の園芸芸術「石付作」をテーマにした、韓国でも数少ない専門展示施設だ。さまざまな形の水石や盆栽が庭園のように広がり、雨の日でものんびり見て回れる。" }
+    },
+    "숨도카페": {
+      en: { name:"Sumdo Cafe", one:"A café inside the Seokbujak Museum grounds, overlooking the garden", story:"Set within the grounds of the Seogwipo Seokbujak Museum, this café lets you sip coffee on the terrace or in the garden while admiring the beautifully tended stone and bonsai displays. It's close to Cheonjiyeon Falls and has ample parking, making it an easy add-on to a museum visit." },
+      zh: { name:"숨도咖啡馆", one:"坐落在石附作博物馆内、可眺望庭园休憩的咖啡馆", story:"这家咖啡馆位于西归浦石附作博物馆内,可在露台和庭园中一边欣赏精心打理的奇石盆景,一边享用咖啡。距离天地渊瀑布很近,停车位充足,适合参观博物馆时顺路一游。" },
+      ja: { name:"スムドカフェ", one:"石付作博物館の敷地内にあり、庭園を眺めながらくつろげるカフェ", story:"西帰浦石付作博物館の敷地内にあるカフェで、テラスや庭園から手入れの行き届いた水石・盆栽の庭を眺めながらコーヒーを楽しめる。天地淵滝から近く駐車スペースも広いので、博物館見学と合わせて立ち寄りやすい。" }
+    },
+    "카페 텐저린": {
+      en: { name:"Cafe Tangerine", one:"A brunch café in Hogeun-dong with a spacious garden and floor-to-ceiling windows", story:"Located along Ieodo-ro, this brunch café is known for its signature 'Tangerine Brunch' (ciabatta, bacon, sausage, and homemade jam) and croffles. With a spacious garden and photo spots, it's a relaxed place to spend a leisurely morning." },
+      zh: { name:"Tangerine咖啡", one:"位于好近洞、拥有宽敞庭院与落地窗的早午餐咖啡馆", story:"这家早午餐咖啡馆坐落在路边,主打菜品“Tangerine早午餐”(法棍面包配培根、香肠与自制果酱)和可颂华夫饼(croffle)深受欢迎。宽敞的庭院和拍照打卡点,适合悠闲地度过一个上午。" },
+      ja: { name:"カフェ・タンジェリン", one:"広い庭とガラス張りの窓が印象的な、好近洞のブランチカフェ", story:"済州の道端に位置するブランチカフェで、看板メニューの「タンジェリンブランチ」(チャバタ、ベーコン、ソーセージ、自家製ジャム)とクロッフルが人気。広い庭とフォトスポットがあり、ゆったりと朝の時間を過ごせる。" }
+    },
+    "허니문하우스": {
+      en: { name:"Honeymoon House", one:"An exotic ocean-view café known as a filming location for the drama Narco-Saints (Suriname)", story:"Renovated from a former resort building, this café blends palm trees and exotic architecture with the Jeju coastline for a feel reminiscent of an overseas resort. It functions as a café by day and shifts to a pub atmosphere in the evening, drawing crowds especially around sunset." },
+      zh: { name:"蜜月屋", one:"因电视剧《毒枭圣徒》(苏里南)取景地而闻名的异域风情海景咖啡馆", story:"这家咖啡馆由旧度假村建筑改造而成,棕榈树与异国风情的建筑与济州大海相映成趣,宛如置身海外度假胜地。白天是咖啡馆,晚上则变身酒吧氛围,日落时分尤其人气爆棚。" },
+      ja: { name:"ハネムーンハウス", one:"ドラマ『スリナム』のロケ地として知られる、異国情緒あふれるオーシャンビューカフェ", story:"旧リゾート施設を改装したカフェで、ヤシの木とエキゾチックな建築が済州の海と溶け合い、まるで海外リゾートに来たような雰囲気を演出する。昼はカフェ、夜はパブの雰囲気に変わり、夕暮れ時には特に多くの人で賑わう。" }
+    },
+    "서중천 탐방로": {
+      en: { name:"Seojungcheon Stream Trail", one:"A valley trail following the stream that flows from Hallasan down to the Namwon coast", story:"This trail follows the Seojungcheon stream from its source on Hallasan's northeastern slope, through Sillye-ri, Hannam-ri, Uigwi-ri, and Taeheung-ri, down to the sea. It connects to the Meocheowat Forest Path, so the two can be walked together, taking in both valley scenery and gotjawal (lava forest) vegetation along the way." },
+      zh: { name:"西中川探访路", one:"沿着从汉拿山流向南元海岸的溪流而建的探访步道", story:"西中川发源于汉拿山东北坡,流经新礼里、翰南里、义贵里、太兴里后入海,这条步道便沿着这段水流而建。它与머체왓숲길(森林步道)相连,可一并行走,沿途既能欣赏溪谷景色,又能看到곶자왈熔岩林植被。" },
+      ja: { name:"西中川(ソジュンチョン)探訪路", one:"漢拏山から流れ出て南元海岸まで続く渓流沿いの探訪路", story:"漢拏山の北東斜面に源を発する西中川が、新礼里・翰南里・義貴里・太興里を経て海へと注ぐ区間に沿って整備された探訪路。モチェワッ(森の道)と繋がっているため合わせて歩きやすく、渓谷とゴッジャワル(溶岩樹林)の植生を同時に楽しめる。" }
+    },
+    "판타스틱버거": {
+      en: { name:"Fantastic Burger", one:"An ocean-view gourmet burger joint on a quiet country road in Toson-ri, Pyoseon", story:"Tucked along a quiet village road on Tosanjungang-ro in Pyoseon, this gourmet burger shop is known for its curry cream burger and white king burger. It makes a great stop on the way to Pyoseon Beach for a meal with an ocean view." },
+      zh: { name:"Fantastic Burger", one:"坐落在表善面土山里乡间小路上的海景手作汉堡店", story:"这家手作汉堡专门店位于表善面土山中央路的静谧村路上,招牌是咖喱奶油汉堡和白金汉堡。前往表善海边的路上顺道用餐,边吃边赏海景恰到好处。" },
+      ja: { name:"ファンタスティックバーガー", one:"表善面土山里ののどかな田舎道沿いにある、オーシャンビューの手作りバーガー店", story:"表善面土山中央路の静かな村道沿いにある手作りバーガー専門店で、カレークリームバーガーとホワイトキングバーガーが看板メニュー。表善海水浴場へ向かう途中、海を眺めながら食事するのにぴったりだ。" }
+    },
+    "아줄레주": {
+      en: { name:"Azulejo", one:"A charming bakery in Sinpung-ri, Seongsan, famous for its egg tarts", story:"Twenty minutes by car from Seongsan Ilchulbong, this bakery café is tucked down a village alley and is best known for its egg tarts. With pretty photo spots throughout, it captures the quiet charm of a rural Jeju village." },
+      zh: { name:"Azulejo", one:"以蛋挞闻名的城山新丰里文艺风格烘焙坊", story:"距离城山日出峰车程20分钟,这家烘焙咖啡馆藏身于村庄小巷深处,招牌是蛋挞。店内布置了许多好看的拍照打卡点,能让人静静感受济州乡村的悠然氛围。" },
+      ja: { name:"アズレージョ", one:"エッグタルトで有名な城山新豊里の感性ベーカリー", story:"城山日出峰から車で20分、村の路地奥にひっそりと佇むベーカリーカフェで、エッグタルトが看板メニュー。おしゃれなフォトスポットとともに、静かな田舎の村の雰囲気を味わえる。" }
+    },
+    "드르쿰다 목장카페": {
+      en: { name:"Deureumda Ranch Café", one:"A ranch-style experience café offering horseback riding, karting, and animal feeding all in one place", story:"Easily accessible right off Beonyeong-ro, this ranch-style experience space rents out safety gear so even beginners can try horseback riding, alongside kart and bike experiences. It's especially popular with families traveling with children." },
+      zh: { name:"드르쿰다牧场咖啡", one:"集骑马、卡丁车、动物喂食体验于一体的牧场式体验咖啡馆", story:"这处牧场式体验空间位于繁荣路大道旁,交通便利,即便是新手也可租借安全装备体验骑马,同时还提供卡丁车和自行车体验。尤其受带孩子出游的家庭旅客欢迎。" },
+      ja: { name:"トゥルクムダ牧場カフェ", one:"乗馬・カート・動物の餌やりを一か所で楽しめる牧場体験カフェ", story:"繁栄路の大通り沿いにあり、アクセスしやすい牧場型体験施設。初心者でも安全装備をレンタルして乗馬体験ができ、カートや自転車体験も一緒に楽しめる。子供連れの家族旅行者に特に人気だ。" }
+    },
+    "친봉산장": {
+      en: { name:"Chinbong Mountain Lodge", one:"A fire-lit café with the genuine feel of a mountain lodge, tucked in the mid-mountain forest", story:"This lodge-style café and bar sits in the mid-mountain area of Songdang-ri, where you can enjoy Irish coffee and draft beer amid the crackle of a wood fire and the faint smell of smoke. It's a café by day and a bar by night, and dogs are welcome if kept in a carrier." },
+      zh: { name:"친봉山庄", one:"位于中山间森林里,充满真实山庄氛围的篝火咖啡馆", story:"这家山庄风格的咖啡酒馆坐落在松堂里中山间地带,可以在柴火燃烧的声响与淡淡烟香中品尝爱尔兰咖啡与生啤。白天是咖啡馆,夜晚变身酒吧,若将宠物犬装入外出笼即可同行。" },
+      ja: { name:"チンボン山荘", one:"中山間の森の中にある、本物の山小屋の雰囲気が漂う焚き火カフェ", story:"松堂里の中山間地帯にある山小屋風カフェ&バーで、薪が燃える音とほのかな煙の匂いの中、アイリッシュコーヒーや生ビールを楽しめる。昼はカフェ、夜はバーの雰囲気に変わり、ペットはキャリーケースに入れれば同伴可能。" }
+    },
+    "우도 땅콩아이스크림 투어": {
+      en: { name:"Udo Peanut Ice Cream", one:"A tour-friendly ice cream stand piled high with Udo's famous whole peanuts", story:"The signature feature is a generous topping of whole peanuts — Udo's famous specialty — over regular ice cream, prized for its crunchy texture. It's an easy stop while cycling or driving an electric cart along Udo's coastal road." },
+      zh: { name:"牛岛花生冰淇淋", one:"撒满牛岛特产整颗花生的冰淇淋,适合环岛途中顺路品尝", story:"特色是在普通冰淇淋上大方撒满牛岛特产整颗花生,酥脆的口感很受欢迎。沿着牛岛环岛路骑自行车或开电动车游玩时,顺路品尝十分方便。" },
+      ja: { name:"牛島(ウド)ピーナッツアイスクリーム", one:"牛島名物のピーナッツを丸ごとたっぷりのせたアイスクリームを味わえる店", story:"牛島名物のピーナッツを砕かずそのまま普通のアイスクリームにたっぷりのせるのが特徴で、コリコリとした食感が人気。牛島の海岸道路を自転車や電動カートで巡りながら立ち寄りやすい。" }
+    },
+    "검멀레해수욕장": {
+      en: { name:"Geommeolle Beach", one:"A black-sand beach tucked in a gorge beneath Udobong Peak", story:"True to its name, which means 'black sand,' this beach sits in a narrow gorge beneath the cliffs of Udobong Peak. At only about 100 meters wide, it's compact, but considered Udo's most distinctive stretch of coastline." },
+      zh: { name:"黑沙海滩(검멀레)", one:"隐藏在牛岛峰下峡谷中的黑沙海滩", story:"正如其名“黑色沙滩”所示,这片黑色沙滩位于牛岛峰悬崖下的狭窄峡谷之间。宽度虽仅有百余米,却被认为是牛岛地形最为独特的一片海滩。" },
+      ja: { name:"コムモルレ海水浴場", one:"牛島峰の下、渓谷に隠れた黒砂の浜辺", story:"「黒い砂」という意味の名前の通り、牛島峰の崖下の狭い渓谷に位置する黒砂の浜辺。幅は100mほどとこぢんまりしているが、牛島で最も個性的な地形を持つビーチとされている。" }
+    },
+    "동안경굴": {
+      en: { name:"Dongan-gyeonggul Cave", one:"A red sea cave among Udo's Eight Scenic Sights, accessible only at low tide", story:"One of Udo's Eight Scenic Sights, Dongan-gyeonggul is nicknamed the 'red nose cave' because its interior glows entirely red. It can only be entered during low tide (roughly the 3rd to 10th day of the lunar tide cycle), so checking tide times before visiting is essential." },
+      zh: { name:"동안경굴海蚀洞", one:"牛岛八景之一,只有退潮时才能进入的红色海蚀洞", story:"作为牛岛八景之一,这处海蚀洞因洞内整体呈现红色而被称为“红鼻洞”。只有在退潮时段(潮汐周期第3至第10潮)才能进入,前往之前务必确认潮汐时间。" },
+      ja: { name:"トンアンギョングル洞窟", one:"干潮時にしか入れない、牛島八景に数えられる赤い海蝕洞", story:"牛島八景の一つであるトンアンギョングルは、洞窟内部が一面赤みを帯びていることから「赤いコックマン(鼻の穴)」と呼ばれる。干潮の時間帯(潮回り3物~10物)にしか入れないため、訪問前の潮汐確認が欠かせない。" }
+    },
+    "하고수동해수욕장": {
+      en: { name:"Hagosudong Beach", one:"Udo's signature beach, known for its wide white sand and emerald water", story:"Located on Udo's northeast side, this beach is included on the island's tour bus route thanks to its wide sandy shore and clear turquoise water. A bridge to Biyangdo (a small islet off Udo) is just 150 meters away on foot." },
+      zh: { name:"하고수동海水浴场", one:"以宽阔白沙滩和翡翠色海水著称的牛岛代表海滩", story:"位于牛岛东北部的这片海滩,以宽阔的沙滩和清澈的海水色泽入选牛岛观光巴士停靠点。步行150米即可抵达通往飞扬岛(牛岛附属小岛)的桥梁。" },
+      ja: { name:"ハゴスドン海水浴場", one:"広い白砂とエメラルドグリーンの海が美しい、牛島を代表するビーチ", story:"牛島の北東部に位置するこのビーチは、広い砂浜と透明感のある海の色から牛島観光バスの停車コースにも含まれている。徒歩150mの場所に飛揚島(ピヤンド、牛島の付属島)へ続く橋がある。" }
+    },
+    "우도등대공원": {
+      en: { name:"Udo Lighthouse Park", one:"Korea's first lighthouse theme park, atop Someori Oreum, Udo's highest peak", story:"Climb 800 meters from the Geommeolle Beach parking lot to the top of Udobong Peak (Someori Oreum) for a sweeping view over all of Udo, and along the way you'll find Udo Lighthouse Park, Korea's first lighthouse-themed park." },
+      zh: { name:"牛岛灯塔公园", one:"位于牛岛最高峰牛头峰(소머리오름)之上,韩国首座灯塔主题公园", story:"从黑沙滩停车场出发,步行800米登上牛岛峰(牛头峰)顶,即可将牛岛全景尽收眼底,登山途中还能看到韩国首座灯塔主题公园——牛岛灯塔公园。" },
+      ja: { name:"牛島灯台公園", one:"牛島最高峰、牛頭峰(ソモリオルム)の頂上にある韓国初の灯台テーマ公園", story:"コムモルレビーチの駐車場から800m、牛島峰(牛頭峰)の頂上まで登ると牛島の全景が一望でき、その道すがら韓国初の灯台テーマ公園である牛島灯台公園がある。" }
+    },
+    "수산봉 하늘그네": {
+      en: { name:"Susanbong Sky Swing", one:"A hidden Aewol swing spot with Susan Reservoir and Hallasan as its backdrop", story:"At the entrance to the climb up Susanbong Peak, also known as Mulme Oreum, this swing photo spot lets you look down on Susan Reservoir while Hallasan rises straight ahead, creating photos that look like you're floating in the sky. It's a short walk — just 3 minutes from the entrance." },
+      zh: { name:"水山峰天空秋千", one:"以水山水库与汉拿山为背景的涯月隐藏版秋千打卡点", story:"水山峰又名“物梅岳”,在其登山口附近有一处秋千拍照点,坐上秋千,脚下是水山水库,正前方是汉拿山,能拍出仿佛悬浮空中的照片。从入口步行仅3分钟即可到达,路程很短。" },
+      ja: { name:"水山峰(スサンボン)スカイブランコ", one:"水山貯水池と漢拏山を背景にした、涯月の穴場ブランコスポット", story:"ムルメオルムとも呼ばれる水山峰の登り口にあるブランコフォトスポット。ブランコに乗ると眼下に水山貯水池、正面に漢拏山が広がり、まるで空に浮いているような写真が撮れる。入口から3分ほどの短いコースだ。" }
+    },
+    "노꼬메오름": {
+      en: { name:"Nokkome Oreum", one:"A horseshoe-crater oreum in Aewol's mid-mountains, birthplace of the surrounding gotjawal", story:"Standing 834 meters between Sogil-ri and Yusuam-ri in Aewol, Nokkome Oreum has a distinctive horseshoe-shaped crater, and lava that once flowed from it is said to have formed the Aewol gotjawal (lava forest). The round-trip course is 3.5 km and takes 1.5 to 2 hours, and it's especially popular during silver grass season." },
+      zh: { name:"노꼬메岳", one:"涯月中山间的马蹄形火山口岳,곶자왈熔岩林的发源地", story:"노꼬메岳位于涯月邑所吉里与流水岩里之间,海拔834米,拥有独特的马蹄形火山口,据说从此处流出的熔岩形成了涯月곶자왈熔岩林。往返路程3.5公里,需时1.5至2小时,芒草季尤其人气旺盛。" },
+      ja: { name:"ノッコメオルム", one:"涯月の中山間にある馬蹄形火口のオルム、ゴッジャワルの発祥地", story:"涯月邑所吉里と流水岩里の間にある標高834mのノッコメオルムは、珍しい馬蹄形の火口を持ち、ここから流れ出た溶岩が涯月ゴッジャワル(溶岩樹林)を作ったと言われている。往復3.5km、所要1時間30分~2時間のコースで、ススキの季節に特に人気が高い。" }
+    },
+    "이끼숲소길": {
+      en: { name:"Ikkisup Moss Forest Café, Sogil", one:"A vast forest café in Aewol built around a 66,000㎡ moss garden", story:"This garden-style café spans roughly 66,000 square meters of lush trees and moss, with walking paths and photo spots scattered throughout. Guests can enjoy baked goods and desserts while strolling through the forest, making it popular with families." },
+      zh: { name:"苔藓森林咖啡园(所吉里)", one:"拥有约6.6万平方米苔藓庭园的涯月大型森林咖啡馆", story:"这座花园式咖啡馆占地约6.6万平方米,林木葱郁、苔藓遍布,四处设有步道和拍照点。可以一边品尝烘焙甜点,一边漫步森林,深受家庭游客喜爱。" },
+      ja: { name:"苔の森カフェ(所吉里)", one:"約6.6万㎡の苔の庭園を擁する涯月の大型森カフェ", story:"鬱蒼とした木々と苔に覆われた約6.6万㎡の庭園型カフェで、あちこちに散策路とフォトスポットが用意されている。ベーカリーやデザートを楽しみながら森の散歩ができ、家族連れに人気だ。" }
+    },
+    "그래인스쿠키 제주점": {
+      en: { name:"Grains Cookie Jeju", one:"A dessert café in Yusuam-ri, Aewol, specializing in handmade cookies", story:"Tucked inside the village of Yusuam-ri in Aewol, this handmade-cookie dessert café sits a little apart from the busy Aewol café strip, offering a quiet place to focus on dessert." },
+      zh: { name:"Grains Cookie济州店", one:"专注手工饼干的涯月流水岩里甜品咖啡馆", story:"这家手工饼干甜品咖啡馆藏身于涯月邑流水岩里村庄深处,与热闹的涯月咖啡街略有距离,可以在安静的环境中专心享用甜点。" },
+      ja: { name:"グレインズクッキー済州店", one:"手作りクッキー専門の涯月流水岩里のデザートカフェ", story:"涯月邑流水岩里の村の奥にある手作りクッキー専門のデザートカフェ。賑やかな涯月カフェ通りから少し離れた静かな立地で、デザートに集中して向き合える。" }
+    },
+    "베롱혼디": {
+      en: { name:"Berong Hondi", one:"A newly opened dog-friendly café-bar in the village of Mureung", story:"This newly opened café-bar sits in the quiet village of Mureung-ri in Daejeong, functioning as a café by day and a bar by night. Dogs are welcome, and it's gaining a following among travelers who like to wander Mureung-ri on foot." },
+      zh: { name:"베롱혼디咖啡吧", one:"位于武陵里的新开可携爱犬咖啡酒吧", story:"这家新开的咖啡酒吧坐落在大静邑武陵里的静谧村庄中,白天是咖啡馆,夜晚变身酒吧。因可携宠物犬同行,逐渐受到喜欢漫步武陵里的旅行者青睐。" },
+      ja: { name:"ベロンホンディ", one:"武陵里にオープンしたばかりの、愛犬同伴OKなカフェバー", story:"大静邑武陵里の静かな村にオープンしたばかりのカフェバーで、昼はカフェ、夜はバーとして営業する。ペット同伴が可能なため、武陵里を散歩がてら巡る旅行者の間で知られつつある。" }
+    },
+    "카페 루시아 본점": {
+      en: { name:"Cafe Lucia (Main Branch)", one:"A rooftop café with sweeping views of Daepyeong Port and the Baksugijeong cliffs", story:"Perched on the coastal cliffs of Daepyeong-ri, this café's rooftop and outdoor tables offer views of both the Baksugijeong basalt columns and the sea at Daepyeong Port. It gets especially busy around sunset." },
+      zh: { name:"Lucia咖啡本店", one:"将大坪港与박수기정绝壁美景尽收眼底的屋顶咖啡馆", story:"这家咖啡馆坐落在大坪里的海岸悬崖之上,在屋顶露台和户外座位区,可同时欣赏박수기정的柱状节理与大坪港的海景。日落时段人气尤其火爆。" },
+      ja: { name:"カフェ・ルシア本店", one:"大坪港とパクスギジョンの絶景を一望できるルーフトップカフェ", story:"大坪里の海岸崖の上に位置し、ルーフトップと屋外テーブルからパクスギジョンの柱状節理と大坪港の海を同時に眺められる。夕暮れ時は特に混み合う。" }
+    },
+    "청수곶자왈 반딧불이 축제": {
+      en: { name:"Cheongsu Gotjawal Firefly Festival", one:"A June–July nighttime nature festival in the firefly habitat of Cheongsu Gotjawal", story:"Cheongsu Gotjawal is home to Luciola unmunsana and Luciola lateralis fireflies, and each early summer a nighttime firefly-viewing program runs out of Cheongsu-ri's Utteureu Bit Center. Visitors can experience the ecosystem of a gotjawal (lava forest) that hosts some 180 plant species and 80 animal species, walking dark forest paths lit by the glow of fireflies." },
+      zh: { name:"清水곶자왈萤火虫节", one:"每年6至7月,在萤火虫栖息地清水곶자왈举办的夜间生态节庆", story:"清水곶자왈是云门山萤火虫与晚萤火虫的栖息地,每年初夏都会以清水里的웃뜨르빛中心为据点开展夜间萤火虫探访项目。游客可以在漆黑的林间小路上,伴着萤火虫的微光,体验栖息着约180种植物和80种动物的곶자왈熔岩林生态。" },
+      ja: { name:"清水(チョンス)ゴッジャワル ホタル祭り", one:"毎年6~7月、ホタルの生息地・清水ゴッジャワルで開催される夜の生態系フェスティバル", story:"清水ゴッジャワルはウンムンサンボタルとヘイケボタルの生息地で、毎年初夏、清水里のウットゥルビッセンターを拠点に夜のホタル観察プログラムが開催される。約180種の植物と80種の動物が生息するゴッジャワル(溶岩樹林)の生態系を、暗い森の小道でホタルの光とともに体験できる。" }
+    },
+    "가파도 해물짜장짬뽕": {
+      en: { name:"Gapado Seafood Jjajangmyeon & Jjamppong", one:"Seafood jjajangmyeon and jjamppong on Gapado, the island of rippling green barley fields", story:"A favorite Chinese restaurant among Gapado visitors after walking the Olle trail through the barley fields, its signature dishes are jjajangmyeon and jjamppong loaded with seafood caught around the island. Prices are reasonable and the food gets consistently good reviews." },
+      zh: { name:"加波岛海鲜炸酱面·辣海鲜面", one:"在青麦浪之岛加波岛,品尝地道的海鲜炸酱面与辣海鲜面", story:"这家中餐馆是游客漫步加波岛青麦田偶来小路后常去的地方,招牌是加入大量本岛海鲜的炸酱面和辣海鲜面。价格实惠,口味也广受好评。" },
+      ja: { name:"加波島(カパド)海鮮ジャージャー麺・チャンポン", one:"青麦の波打つ島・加波島で味わう海鮮ジャージャー麺とチャンポン", story:"加波島の青麦畑オルレを歩いた後、観光客がよく訪れる中華料理店で、島で獲れた海鮮をたっぷり使ったジャージャー麺とチャンポンが看板メニュー。値段も手頃で味も良いと評判だ。" }
+    },
+    "마라도성당 · 마라도원조짜장면집": {
+      en: { name:"Marado Church & Marado Original Jjajangmyeon House", one:"A clifftop church at Korea's southernmost point, and the original jjajangmyeon shop that put Marado on the map", story:"With a roof shaped like an abalone shell, Marado Church stands on a cliff at Korea's southernmost point and keeps its sanctuary open to visitors even outside service hours. Nearby, Marado Original Jjajangmyeon House was the first restaurant to sell jjajangmyeon on the island, and after being featured on a TV variety show, it became a must-visit stop on any Marado trip." },
+      zh: { name:"马罗岛天主教堂·马罗岛元祖炸酱面店", one:"国土最南端悬崖上的教堂,与让马罗岛声名远扬的元祖炸酱面店", story:"马罗岛天主教堂屋顶造型宛如鲍鱼壳,矗立在国土最南端的悬崖上,平日也会向游客开放圣堂参观。附近的马罗岛元祖炸酱面店是岛上最早开始卖炸酱面的店铺,自从在综艺节目中亮相后,便成了马罗岛旅行的必访之地。" },
+      ja: { name:"馬羅島(マラド)聖堂・馬羅島元祖ジャージャー麺の店", one:"韓国最南端の崖の上に立つ聖堂と、馬羅島を有名にした元祖ジャージャー麺の店", story:"アワビの殻を思わせる屋根が印象的な馬羅島聖堂は、韓国最南端の崖の上に立ち、普段から聖堂を観光客に開放している。近くの馬羅島元祖ジャージャー麺の店は、馬羅島で初めてジャージャー麺を売り始めた店で、バラエティ番組で紹介されて以来、馬羅島観光の定番コースとなった。" }
+    },
+    "선흘방주할머니식당": {
+      en: { name:"Seonheul Bangju Grandmother's Restaurant", one:"A local restaurant in Seonheul serving tofu dishes made with volcanic seawater", story:"Located in Seonheul-ri, a mid-mountain village in Jocheon, this restaurant cooks with ingredients grown and gathered locally. Its signature dishes are tofu hot pot and gomchwi (ligularia) dumplings, both made using tofu produced with volcanic seawater; black pork bossam and buckwheat noodle soup round out the menu." },
+      zh: { name:"선흘方舟奶奶食堂", one:"以火山海水制成的豆腐料理为特色的선흘里乡土食堂", story:"这家餐厅位于朝天邑中山间村庄선흘里,使用当地出产和采集的食材烹制料理。招牌是用熔岩海水制作的豆腐锅和苦菜饺子,还可品尝黑猪肉包菜和荞麦刀削面等菜品。" },
+      ja: { name:"ソンフル・バンジュおばあさん食堂", one:"火山海水で作った豆腐料理を出すソンフル里の郷土食堂", story:"朝天邑の中山間の村、ソンフル里で、地元で採れた食材を使って料理を出す食堂。溶岩海水で作った豆腐を使ったトゥブジョンゴル(豆腐鍋)とゴムチィ餃子が看板メニューで、黒豚ポッサムや蕎麦カルグクスなども味わえる。" }
+    },
+    "동구미": {
+      en: { name:"Donggumi", one:"A quiet local café in the mid-mountain village of Wasan-ri, Jocheon", story:"Set a little off the beaten tourist path inside the village of Wasan-ri, this quiet local café is well rated among residents. It's conveniently located for a stop before or after visiting Saryeoni Forest Path or Geomun Oreum." },
+      zh: { name:"동구미咖啡", one:"位于朝天邑瓦山里中山间村庄的安静本地咖啡馆", story:"这家咖啡馆位于瓦山里村庄内部,略微远离热门景区,以本地人评价颇高的静谧氛围著称。前往思连伊林荫路或巨文岳前后顺路一游十分方便。" },
+      ja: { name:"トングミ", one:"朝天邑瓦山里の中山間の村にある、静かなローカルカフェ", story:"観光地から少し外れた瓦山里の村の奥にあるカフェで、地元住民からの評価が高い落ち着いた雰囲気のローカルカフェ。サリョニの森の道やコムンオルムを訪れる前後に立ち寄りやすい立地だ。" }
+    },
+    "노형수퍼마켙": {
+      en: { name:"Nohyeong Supermarket", one:"An immersive media-art theme park with an overwhelming 4,000㎡ of scale", story:"Converted from a former supermarket building, this large-scale media art exhibition hall reaches up to 20 meters high (about six stories) and houses five immersive video installations, including 'Wallang Wallang' and 'Berong Berong.' It's a popular rainy-day alternative since it can be enjoyed regardless of weather." },
+      zh: { name:"老衡超市", one:"占地4000平方米、气势磅礴的沉浸式媒体艺术主题公园", story:"由旧超市建筑改造而成的大型媒体艺术展馆,内部最高处达20米(相当于六层楼高),设有“哗啷哗啷”“贝隆贝隆”等5个沉浸式影像展览。不受天气影响,是雨天的热门替代景点。" },
+      ja: { name:"老衡(ノヒョン)スーパーマーケット", one:"4000㎡の圧倒的スケールを誇るメディアアート・テーマパーク", story:"旧スーパーマーケットの建物を改装した大型メディアアート展示館で、最大高さ20m(6階建てビルに相当)の空間に「ワランワラン」「ペロンペロン」など5つの没入型映像展示が広がる。天候に関係なく楽しめるため、雨の日の代替コースとして人気だ。" }
+    },
+    "추자도 올레 18-1코스": {
+      en: { name:"Chujado Olle Trail Course 18-1", one:"An 18.2km Olle route crossing the whole island between Sangchuja and Hachuja", story:"Chujado's signature trekking course passes through mountains, coastline, and village roads, taking 6–8 hours to complete, so an overnight stay is recommended. At the open lighthouse viewpoint, the view is so unobstructed you can sense the curve of the earth." },
+      zh: { name:"楸子岛偶来18-1路线", one:"往返上楸子岛与下楸子岛、纵览全岛的18.2公里偶来小路", story:"这条路线是楸子岛最具代表性的徒步路线,穿越山地、海岸与村道,全程需时6至8小时,建议安排一晚住宿。在视野开阔的灯塔观景点,甚至能感受到地球的弧度。" },
+      ja: { name:"楸子島(チュジャド)オルレ18-1コース", one:"上楸子島と下楸子島を行き来しながら島全体を歩く18.2kmのオルレコース", story:"山と海、村道をすべて通る楸子島を代表するトレッキングコースで、完歩には6~8時間かかるため一泊の日程がおすすめ。四方が開けた灯台の展望地点では、地球の曲線を感じられるほど視界が広がる。" }
+    },
+    "추자등대": {
+      en: { name:"Chuja Lighthouse", one:"A lighthouse guiding ships through the night across the Jeju Strait", story:"This lighthouse safeguards ferries connecting Jeju with Busan and Mokpo, as well as vessels sailing the East China Sea. It sits along the Chujado Olle trail, making it an easy stop during a trek." },
+      zh: { name:"楸子灯塔", one:"为往来济州海峡的船只指引夜路的楸子灯塔", story:"这座灯塔守护着连接济州与釜山、木浦的客轮以及穿梭东海(东中国海)的船只安全,恰好位于楸子岛偶来路线之上,徒步途中顺路可访。" },
+      ja: { name:"楸子灯台", one:"済州海峡を行き交う船の夜の航路を守る楸子島の灯台", story:"済州と釜山・木浦を結ぶフェリーや東シナ海を航行する船舶の安全を守る灯台で、楸子島オルレコースに含まれているため、トレッキングの途中で立ち寄りやすい。" }
+    },
+    "신등대수산식당": {
+      en: { name:"Sindeungdae Fisheries Restaurant", one:"A Chujado seafood set menu enjoyed with a view of Sangchuja Harbor", story:"Right in front of Sangchuja Harbor, this two-story seafood restaurant with sweeping sea views serves set menus such as dried yellow croaker, Spanish mackerel, and spicy croaker stew. Since there are no restaurants along the Olle trail itself, it's a popular place to eat beforehand near Sangchuja Harbor." },
+      zh: { name:"新灯台水产食堂", one:"边眺望上楸子港边享用的楸子岛海鲜定食", story:"这家海鲜专门店紧邻上楸子港,坐落在视野开阔的两层楼建筑内,供应黄花鱼定食、马鲛鱼定食、辣炖黄花鱼等菜品。由于偶来路线沿途没有餐厅,许多人会选择在上楸子港附近提前用餐。" },
+      ja: { name:"新灯台水産食堂", one:"上楸子港を眺めながら味わう楸子島の海鮮定食", story:"上楸子港のすぐ前、海を一望できる2階建ての海鮮専門店で、グルビ(干し黄魚)定食、サワラ定食、イシモチの辛味鍋などを提供する。オルレコース中には飲食店がないため、上楸子港付近で事前に食事を済ませておくのに適した店として知られている。" }
     }
   };  // spot.n(한국어 이름) -> { en:{name,one,story}, zh:{…}, ja:{…} }
 
@@ -2885,6 +3038,7 @@
   function render(){
     window.scrollTo(0, 0);
     document.body.dataset.view = state.step < 0 ? "intro" : state.step >= STEPS.length ? "result" : "questions";
+    document.body.dataset.lang = lang;
     if(state.step < STEPS.length) applyMood("ocean");
     if(state.step === -1) renderIntro();
     else if(state.step >= STEPS.length) renderResult();
